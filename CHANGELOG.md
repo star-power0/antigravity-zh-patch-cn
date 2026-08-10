@@ -1,5 +1,16 @@
 # 更新日志
 
+## 衍生版本：启动器稳定性修复
+
+### 修复
+- 修复启动器注入 `utils.js` 时误删 `return win;` 和函数闭合括号的问题，避免 Antigravity 主进程出现 `SyntaxError: Unexpected end of input`。
+- 重新打包前从健康备份恢复原始资源，避免在损坏的 `app.asar` 上重复修补。
+- 增加内置离线 ASAR 解包/打包工具，减少对网络依赖。
+
+### 来源
+- 本版本基于同学 `ROG` 的开源项目 [myzane678/antigravity-zh-patch](https://github.com/myzane678/antigravity-zh-patch) 修改和二次开发。
+- 继续遵循原项目 MIT 许可证并保留原作者署名。
+
 ## v5.0.3
 
 适配版本：Antigravity `2.0.11`
