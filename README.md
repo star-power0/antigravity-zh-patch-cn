@@ -8,8 +8,9 @@
 
 ## 当前版本
 
-- 补丁版本：`v5.0.3`
+- 补丁版本：`v5.1.0`
 - 已确认适配：Antigravity `2.0.11`
+- 发布类型：公开开源版本
 - 核心文件：
   - `patches/translate-inject.js`（翻译脚本核心）
   - `patches/translate-launcher.js` 与 `translate-launcher.vbs`（自动修补启动器）
