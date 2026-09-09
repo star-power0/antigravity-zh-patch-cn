@@ -38,7 +38,7 @@ try {
     }
 
     // 用 powershell 创建快捷方式
-    const psCmd = `powershell -Command "$WshShell = New-Object -ComObject WScript.Shell; $Shortcut = $WshShell.CreateShortcut('${path.join(desktopPath, 'Antigravity (汉化启动).lnk')}'); $Shortcut.TargetPath = 'wscript.exe'; $Shortcut.Arguments = '\\"${path.join(APP_DIR, 'translate-launcher.vbs')}\\"'; $Shortcut.IconLocation = '\\"${path.join(APP_DIR, 'Antigravity.exe')}\\", 0'; $Shortcut.Save()"`;
+    const psCmd = `powershell -Command "$WshShell = New-Object -ComObject WScript.Shell; $Shortcut = $WshShell.CreateShortcut('${path.join(desktopPath, 'Antigravity (汉化启动).lnk')}'); $Shortcut.TargetPath = 'C:\\Windows\\System32\\wscript.exe'; $Shortcut.Arguments = '\\"${path.join(APP_DIR, 'translate-launcher.vbs')}\\"'; $Shortcut.IconLocation = '${path.join(APP_DIR, 'Antigravity.exe')},0'; $Shortcut.Save()"`;
     execSync(psCmd);
     console.log(`桌面快捷方式创建成功，路径: ${desktopPath}`);
 } catch (e) {

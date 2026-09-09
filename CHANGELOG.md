@@ -1,5 +1,17 @@
 # 更新日志
 
+## 2026-09-09 运维记录
+
+- Antigravity 客户端自动更新至 `2.12.2`，第三次复发：启动器四件套（vbs/launcher.js/汉化脚本/asar 工具）与 `app.asar.bak` 被清空，桌面快捷方式报「Windows Script Host 无法找到脚本文件 translate-launcher.vbs」。
+- 已从本仓库源码重新部署四件套（`translate-inject.js` 部署为 `translate-inject-backup.js`），运行启动器重打 `app.asar`，marker 校验通过、`app.asar.bak` 重新生成，客户端正常启动。
+- 结论不变：客户端每次自动更新都会清掉非官方文件，出现 WSH 报错时重跑 `install.bat` 即可恢复。
+
+## 2026-08-28 运维记录
+
+- Antigravity 客户端自动更新至 `2.11.0`（NSIS 静默安装会清空安装目录下的启动器文件与 `app.asar.bak`），已重新执行 `install.js` 并由启动器重打 `app.asar`，验证客户端可正常启动。
+- 结论：客户端每次后台自动更新后都会复发「WSH 找不到 translate-launcher.vbs」，重跑 `install.bat` 即可恢复。
+- 修复桌面快捷方式白色空白图标：`install.js` 原先写入的 `IconLocation` 带有多余引号（`"exe路径", 0`）且 `TargetPath` 使用未限定的 `wscript.exe`，客户端更新交换文件期间图标缓存被污染。已改为干净的 `exe路径,0` 格式与 `wscript.exe` 全路径，并刷新图标缓存，验证 Shell 已解析出正常 Antigravity 图标。
+
 ## 衍生版本：启动器稳定性修复
 
 ### 修复
