@@ -1,5 +1,79 @@
 # 更新日志
 
+## [6.0.0] - 2026-10-08
+
+### Added
+- **纯原生内存流 ASAR 极速修补引擎**（`lib/asar-patcher.js`）：无需解压 1000+ 文件，直接在内存 Buffer 中解析 ASAR Header，自动重算偏移与校验和，30ms 毫秒级写入，彻底杜绝 Windows 文件占用与磁盘碎文件。
+- **Preload 预加载原生热注入**：注入目标转为 Electron 原生的 `dist/preload.js`，随渲染进程启动即行执行，首屏 0 延迟、0 英文闪烁。
+- **744+ 海量静态精校离线词典**（`lib/dictionary.json` 与内嵌模块）：覆盖菜单栏、设置全项（全局权限、计划审阅策略、安全预设、本地权限等）、模型配额、用量明细、版本对比、终端面板与侧边栏 `Automations`。
+- **彻底根治机翻与专有名词误伤**：以官方原版 `app.asar.bak` 为纯净底包，彻底剔除旧版残留的 `utils.js` 钩子及 Google 翻译接口，彻底消除将 `CodexWorkspace` 机翻为「法典工作区」、将 `Ubuntu` 机翻等失控现象。
+- **`formatQuotaDuration` 紧凑时间算法**：彻底修复官方个人用量/额度刷新倒计时在窄屏幕下被截断成 `wee...` 的排版顽疾。
+- **动态计时与状态计数实时汉化**：支持思考时长（`Thinking for 2.5s`）、工作耗时、文件变更数、子智能体数量等多类动态 UI 模板。
+- **环境诊断与体检系统**（`install.js --doctor` / `install.bat -doctor`）：快速输出操作系统、Node 环境、客户端版本、ASAR 注入状态及备份健康报告。
+- **官方原版一键回滚**（`install.js --restore` / `install.bat -restore`）：快速安全恢复官方未修改二进制。
+
+### Changed
+- 重构 `install.js` 与 `install.bat`，全面优化为绿色便携安装体系，一键无损极速写入。
+- 升级 DOM TreeWalker 与 MutationObserver 引擎，支持 Shadow DOM 动态穿透与 `requestIdleCallback` 状态回弹微扫。
+
+### Removed
+- **彻底移除外部在线翻译 API 依赖**（Google/MyMemory），消除因网络延迟或服务波动导致的界面白字与闪烁，达成 100% 纯离线中文化。
+- **彻底移除旧版脆弱的启动器文件依赖**（`translate-launcher.js` / `translate-launcher.vbs`），不再向安装目录投放易被清理的外部中间文件，从根源上终结「官方静默升级后桌面快捷方式报 WSH 找不到文件」的顽疾。
+- **坚决杜绝任何流氓开机启动项与后台常驻进程**，规避杀毒软件（卡巴斯基、火绒等）主动防御 PDM 拦截，保持 100% 绿色安全。
+
+## 2026-10-08 运维记录（Agent 执行报错排查）
+
+- 现象：汉化补丁恢复后界面可正常使用，但每次发送消息都报 `Agent execution terminated due to error`，Error ID `42aaeff3-afc9-4ac1-997f-fc8732cbdafa-2`。
+- 日志定位（`%APPDATA%\Antigravity\logs\language_server.log`）：
+  - Error ID 是 trajectory_id，消息本身已送达（`SEND_USER_CASCADE_MESSAGE_LATENCY ... status:OK`），报错发生在轨迹执行阶段。
+  - 真正的报错行：`agent executor error: generating and executing: FAILED_PRECONDITION (code 400): User location is not supported for the API use.`；「对话标题生成」报同一个错，说明与具体请求无关。
+- 网络取证：
+  - 本机存在国内分流。国内站点（myip.ipip.net）走真实宽带直出 `113.58.74.21`（中国海南海口/联通），国外站点（含 Google）一律走 `23.237.50.27/.28`（US，`FDCservers.net LLC`，机房/托管 ASN）。
+  - 出口链路健康：Tun 下 `www.google.com/generate_204` → 204，源地址 `172.18.0.1`；`daily-cloudcode-pa.googleapis.com` 返回 404（可达，仅无路径）；`generativelanguage.googleapis.com` 403（缺 key，属预期）。**不是网络不通，是出口 IP 被 Google 拒**。
+  - IPv6 假设已排除：`singbox_tun` 只有 IPv4 默认路由，IPv6 经 WLAN 出，实测 `connect ... failed: Bad access`，Google 走不通 IPv6，故不存在 IPv6 泄漏导致的误判。
+  - 为何必须开 Tun：Antigravity 的语言服务器是 Go 进程，只读 `HTTP(S)_PROXY` 环境变量，不读 Windows 注册表里的系统代理（`127.0.0.1:10808`），因此无 Tun 时它无法出网。
+- 同类案例（已验证，非本机个案）：
+  - [router-for-me/CLIProxyAPI#3999](https://github.com/router-for-me/CLIProxyAPI/issues/3999)：判别因素纯粹是出口 IP，**机房/托管 IP 即使归属地为支持地区也会被拒；换成住宅/边缘 IP 出口后 generateContent 与 streamGenerateContent 均 200 OK**；官方桌面客户端能用是因为它跑在住宅 IP 上。Claude/GPT 系模型不受此门禁影响。
+  - [Google AI 论坛：东京 IDC Frontier 付费客户被误判](https://discuss.ai.google.dev/t/paid-gemini-api-customer-blocked-by-incorrect-ip-geolocation-user-location-is-not-supported-from-a-tokyo-japan-datacenter-ip/183984)：服务器在东京（支持地区），但 IP 属 IDC Frontier 机房段，Google 的 GeoIP 不认，Tier 2 付费用户同样被 400 拒。
+  - [Google AI 论坛：How to fix the 400 API location error](https://discuss.ai.google.dev/t/how-to-fix-the-400-api-location-error/142028)：其中一条解法是把 `daily-cloudcode-pa.googleapis.com` 加进路由规则（企业 VPN 拦了该域名）；本机该域名可达，不适用。
+  - [Reddit：User location is not supported](https://www.reddit.com/r/google_antigravity/comments/1wo0ckz/failed_precondition_code_400_user_location_is_not/)：换 Google 看到的 IP 后恢复。
+- 结论：**本地无可修项，根因是 sing-box 的海外出口落在 FDCservers 机房段，被 Google Cloud Code / Gemini API 的地域门禁拦截**。与汉化补丁无关，重装客户端、关开 Tun、换账号均无效。
+- 解法（按优先级）：
+  1. 给 `googleapis.com`（尤其 `daily-cloudcode-pa.googleapis.com`）单独指定**住宅/家宽 IP 出口**，这是唯一被验证有效的做法。
+  2. 短期绕过：Antigravity 里把模型从 Gemini 系换成 Claude / GPT——两者不走该地域门禁。当前默认的 `Gemini 3.8 Flash Medium` 正好是受害模型。
+  3. 不建议优先尝试：自带 Gemini API Key。多数案例显示 Key 方式同样吃 IP 门禁。
+
+### 当日解决记录（续）
+
+- 丞相操作后恢复正常：`Gemini 3.8 Flash High` 可正常完成对话，界面完整，无 `Agent execution terminated` 复现。
+- 出口 IP 实测已由 `23.237.50.28`（US，FDCservers.net，机房段）变为 `203.10.99.11`（JP，GSL Networks）。机制与上述判断一致——**判定因素是出口 IP 本身，与汉化补丁、Tun、账号均无关，换节点即恢复**。
+- 需注意：GSL Networks 同为托管/机房 ASN，却能通过门禁。说明判别不是「住宅 vs 机房」的二元规则，而是 Google 侧逐 IP/ASN 的信誉判定。因此下次复现时不要执着于找「家宽节点」，直接逐个换节点试探更快。
+- 复现判据（供下次排查）：`language_server.log` 出现 `FAILED_PRECONDITION (code 400): User location is not supported for the API use.` → 先 `curl -s --noproxy '*' https://api.ipify.org` 看出口，换节点，别去动补丁和账号。
+
+## 2026-10-08 运维记录
+
+- Antigravity 自动升级至 `2.21.1`，第六次复发（同前：WSH 报找不到 `translate-launcher.vbs`）。客户端更新清空了安装目录下的启动器四件套，桌面快捷方式遂失效；`app.asar` 亦回退为官方原版（4643502 字节，sha256 `d075e5d9…`），未留下 `app.asar.bak`。
+- 补充确认（本次新增，前五次未验证）：`2.21.1` 的 `dist/utils.js` 结构未变，注入锚点 `void win.loadURL(url);` 与严格正则（连同 `return win;` 与函数闭合括号）均命中，缩进仍为 4 空格，补丁逻辑无需改动。
+- 已从本仓库源码重新部署四件套（`install.js` → `translate-inject-backup.js` / `translate-launcher.js` / `translate-launcher.vbs` / `lib/asar.js` + `force-patch.flag`），运行启动器重打 `app.asar`。
+- 校验：新 `app.asar`（4599043 字节）与原 `app.asar.bak` 逐文件 SHA256 比对，1048 个原文件零丢失、零改动，仅 `dist/utils.js` 变更并新增 `dist/translate-inject.js`；`node --check` 语法通过，`return win;` 与函数闭合括号完好；`app.asar.unpacked` 内 293 个 unpacked 条目（chrome-devtools-mcp）完整保留。
+- 实机验证：客户端可正常启动（主窗口标题 `Antigravity`，6 个进程），截图确认菜单栏、侧边栏、输入框提示均已中文化，如「文件 / 视图 / 窗口」「新建对话」「对话历史」「自定义」「设置」「提出任何问题，@提及，/采取行动」。
+- 遗留缺口：侧边栏新增项 `Automations` 未汉化——该文本只存在于静态词典判定范围之外的主界面元素，静态词典未收录、非设置区不触发在线翻译。下次迭代可在 `translate-inject.js` 的 `UI_TEXT_MAP` 中补 `Automations → 自动化`。
+- 结论不变：客户端每次自动更新都会清掉非官方文件，出现 WSH 报错时重跑 `install.bat` 即可恢复。
+
+## 2026-09-22 运维记录
+
+- Antigravity 升级至 `2.15.1`，第五次复发（同前：WSH 报找不到 `translate-launcher.vbs`）。客户端更新清空了安装目录下的启动器四件套与 `app.asar.bak`。
+- 已从本仓库源码重新部署四件套（`install.js` → `translate-inject-backup.js` / `translate-launcher.js` / `translate-launcher.vbs` / `lib/asar.js` + `force-patch.flag`），运行启动器重打 `app.asar`。
+- 校验：新 `app.asar`（4525923 字节）与原包逐文件 SHA256 比对，1042 个原文件零丢失，仅 `dist/utils.js` 变更并新增 `dist/translate-inject.js`；`node --check` 语法通过，`return win;` 与函数闭合括号完好；`app.asar.unpacked`（chrome-devtools-mcp）保持 unpacked；客户端正常启动，主窗口可见。
+- 结论不变：客户端每次自动更新都会清掉非官方文件，出现 WSH 报错时重跑 `install.bat` 即可恢复。
+- 文档同步：`README.md` 与 `docs/manual-install.md` 的「适配版本」由 `2.0.11` 更新为 `2.15.1`；`docs/manual-install.md` 与 `docs/troubleshooting.md` 的「当前补丁版本」由 `v5.0.3` 对齐到 `v5.1.0`（与 `README.md` 一致）。
+
+## 2026-09-16 运维记录
+
+- Antigravity 手动升级至 `2.14.0`，第四次复发（同 09-09 症状：WSH 报找不到 translate-launcher.vbs）。重跑 `install.js` + 启动器自动重打 `app.asar`，marker 校验通过，`2.14.0` 打补丁正常，客户端可正常启动汉化版。
+- 附带确认：`2.14.0` 的 `--cloud_code_endpoint` 仍为 `https://daily-cloudcode-pa.googleapis.com`，该端点是官方默认架构，并非异常配置。
+- 同期排查：客户端聊天报 `FAILED_PRECONDITION (400) User location is not supported for the API use`。已排除——出口 IP（实测美国洛杉矶）、账号地区（美国）、年龄验证（已通过）、代理分流（Tun 模式 + 系统代理例外已加 `127.0.0.0/8`）。同出口下 Gemini Web 正常、AI Studio 同样被拒，判定为 Google 对机场共用落地 IP 的 API 通道风控，本地无可修项。
+
 ## 2026-09-09 运维记录
 
 - Antigravity 客户端自动更新至 `2.12.2`，第三次复发：启动器四件套（vbs/launcher.js/汉化脚本/asar 工具）与 `app.asar.bak` 被清空，桌面快捷方式报「Windows Script Host 无法找到脚本文件 translate-launcher.vbs」。

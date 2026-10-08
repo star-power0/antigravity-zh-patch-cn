@@ -1,564 +1,1310 @@
-// Antigravity 中文界面补丁 — 优先翻译固定 UI 文案，不翻译用户与 AI 对话正文
+// Antigravity Chinese Localization Patch (Pure Native In-Memory Engine)
+// Generated for v6.0.0 -- 100% Offline, Zero Delay, Safe Code Sandbox
 (function() {
   'use strict';
 
-  // 清理历史上被错误缓存的偏误翻译
-  try {
-    localStorage.removeItem('ag_zh_Gemini Models');
-    localStorage.removeItem('ag_zh_Gemini models');
-    localStorage.removeItem('ag_zh_Claude and GPT Models');
-    localStorage.removeItem('ag_zh_Claude and GPT models');
-    localStorage.removeItem('ag_zh_Add Context');
-    localStorage.removeItem('ag_zh_Media');
-    localStorage.removeItem('ag_zh_Mentions');
-    localStorage.removeItem('ag_zh_Actions');
-    localStorage.removeItem('ag_zh_Browser');
-    localStorage.removeItem('ag_zh_codexworkspace');
-    localStorage.removeItem('ag_zh_codex workspace');
-    localStorage.removeItem('ag_zh_codex workspace/');
-  } catch (e) {}
-
-  // ========== 固定 UI 文案映射 ==========
-
-  var UI_TEXT_MAP = {
-    // 导航与通用入口
-    'New Conversation': '新建对话',
-    'Conversation History': '对话历史',
-    'Scheduled Tasks': '计划任务',
-    'Projects': '项目',
-    'Conversations': '对话',
-    'Install IDE': '安装 IDE',
-    'Settings': '设置',
-    'Provide Feedback': '提供反馈',
-    'Open': '打开',
-    'Default': '默认',
-    'Preset': '预设',
-    'File': '文件',
-    'View': '视图',
-    'Window': '窗口',
-    'Zoom In': '放大',
-    'Zoom Out': '缩小',
-    'Reset Zoom': '重置缩放',
-    'Toggle Developer Tools': '切换开发者工具',
-    'Create Project': '创建项目',
-    'Command Palette': '命令面板',
-    'Minimize': '最小化',
-    'Maximize': '最大化',
-    'Close': '关闭',
-    'Upgrade': '升级',
-    'Sign Out': '退出登录',
-    'Refresh': '刷新',
-    'No MCP Servers': '没有 MCP 服务器',
-    'Add MCP +': '添加 MCP +',
-    'Build With Google Plugins': '使用 Google 插件构建',
-    'Request Review': '请求审阅',
-    'Edit': '编辑',
-    'Open System Preferences': '打开系统偏好设置',
-
-    // 状态与初始化
-    'Initializing Coding Session': '正在初始化编码会话',
-    'Project Initialization and Setup': '项目初始化和设置',
-    'Initial Greeting and Setup': '初始问候和设置',
-    'Not in Project': '不在项目中',
-    'Discovering Fun Websites': '发现有趣网站',
-    'English Response Request': '英文回复请求',
-
-    // 设置分类
-    'General': '通用',
-    'Account': '账户',
-    'Permissions': '权限',
-    'Appearance': '外观',
-    'Models': '模型',
-    'Customizations': '自定义',
-    'App': '应用',
-    'Shortcuts': '快捷键',
-    'Agent Settings': '智能体设置',
-    'Agent Behavior': '智能体行为',
-    'Security Preset': '安全预设',
-    'Artifact Review Policy': '制品审阅策略',
-    'Local Permissions': '本地权限',
-    'File Access Rules': '文件访问规则',
-    'Network Access Rules': '网络访问规则',
-    'Terminal Commands': '终端命令',
-    'Commands Outside Sandbox': '沙盒外命令',
-    'MCP Tools': 'MCP 工具',
-    'Chat Settings': '对话设置',
-    'Detailed Agent Chat': '详细代理聊天',
-    'Show and save intermediate thinking steps': '显示并保存中间思维步骤',
-    'Enable Telemetry': '启用遥测',
-    'Marketing Emails': '营销邮件',
-    'Token Usage': '令牌用量',
-    'Installed MCP Servers': '已安装的 MCP 服务器',
-    'Skills': '技能',
-    'Browser Settings': '浏览器设置',
-    'Browser Javascript Execution Policy': '浏览器 JavaScript 执行策略',
-    'Actuation Permissions': '执行权限',
-    'Browser Actuation Rules': '浏览器执行规则',
-    'App Settings': '应用设置',
-    'Prevent Sleep': '阻止休眠',
-    'Keep In Menu Bar': '保留在菜单栏',
-    'Notifications': '通知',
-    'Notification Settings': '通知设置',
-    'Model Credits': '模型额度',
-    'Model Quota': '模型额度',
-    'Gemini models': 'Gemini 模型',
-    'Gemini Models': 'Gemini 模型',
-    'Claude and GPT models': 'Claude 和 GPT 模型',
-    'Claude and GPT Models': 'Claude 和 GPT 模型',
-    'Enable AI Credit Overages': '启用 AI 额度超额使用',
-
-    // 主题与外观
-    'Light Theme': '浅色主题',
-    'Dark Theme': '深色主题',
-    'Light': '浅色',
-    'Default Light': '默认浅色',
-    'Default Dark': '默认深色',
-    'Background': '背景',
-    'Foreground': '前景',
-    'Accent': '强调色',
-
-    // 说明与帮助
-    'Always Ask': '总是询问',
-    'Learn more.': '了解更多。',
-    'Learn more about': '了解更多：',
-    'Configure default behaviors, skills, and MCP servers.': '配置默认行为、技能和 MCP 服务器。',
-    'Configure the browser subagent. It requires Google Chrome to be installed. The browser subagent can be invoked by typing /browser in the conversation input box.': '配置浏览器子代理。它需要先安装 Google Chrome。可在对话输入框中输入 /browser 来调用浏览器子代理。',
-    'Controls whether the agent can run custom JavaScript to automate complex browser actions.': '控制智能体是否可以运行自定义 JavaScript 来自动执行复杂的浏览器操作。',
-    'Configure allowed and denied URLs for browser actuation.': '配置允许和拒绝用于浏览器执行的 URL。',
-    'Manage application settings.': '管理应用设置。',
-    'Prevent the computer from sleeping while the app is running.': '在应用运行期间阻止计算机进入休眠。',
-    'The app will be accessible from the menu bar and will keep running in the background when all windows are closed.': '应用将可从菜单栏访问，并会在所有窗口关闭后继续在后台运行。',
-    'To modify notification settings, open your operating system\'s system preferences.': '要修改通知设置，请打开您操作系统的系统偏好设置。',
-    'Configure AI models and view your quota.': '配置 AI 模型并查看您的额度。',
-    'When toggled on, Antigravity will use your AI credits to fulfill model requests once you\'re out of model quota. Antigravity will always use your model quota first before using AI credits.': '启用后，当您的模型额度用尽时，Antigravity 将使用您的 AI 额度来完成模型请求。在使用 AI 额度之前，Antigravity 始终会优先使用您的模型额度。',
-    'View your available model quota and AI credits. Model quota refreshes periodically based on your plan. Enable AI Credit Overages to continue using models when your quota is exhausted.': '查看您可用的模型额度和 AI 额度。模型额度会根据您的套餐定期刷新。启用 AI 额度超额使用后，在模型额度耗尽时仍可继续使用模型。',
-    'Within each group, models share a weekly limit and a 5-hour limit. Quota is consumed proportionally to the cost of the tokens. Thus, limits will last longer with shorter tasks or using more cost-effective models. The 5-hour limit smooths out aggregate demand to fairly distribute global capacity across all users, while your weekly limit is tied directly to your individual tier.': '在每个分组中，各模型共享每周额度和 5 小时额度。额度消耗与 Token 消耗成本成正比。因此，任务较短或使用更具性价比的模型时，额度使用时间会更长。5 小时额度限制用于平滑总体需求，从而在所有用户之间公平分配全球算力，而您的每周额度限制则直接与您的个人等级绑定。',
-    'Manage your plan, credentials, and general preferences.': '管理您的套餐、凭据和常规偏好设置。',
-    'When toggled on, Antigravity collects usage data to help Google enhance performance and features.': '启用后，Antigravity 会收集使用数据，以帮助 Google 改进性能和功能。',
-    'Receive product updates, tips, and promotions from Google Antigravity via email.': '通过电子邮件接收来自 Google Antigravity 的产品更新、技巧和推广信息。',
-    'You can upgrade to a Google AI Ultra plan to receive the highest rate limits.': '您可以升级到 Google AI Ultra 套餐，以获得最高的速率限制。',
-    'The breakdown below shows token usage from customizations like skills, rules, and MCP. If the budget is exceeded, large customizations will be truncated automatically.': '下方明细显示技能、规则和 MCP 等自定义项的令牌用量。如果超出预算，较大的自定义项将被自动截断。',
-    'You currently don\'t have any MCP Servers installed. Add an MCP server above': '您当前尚未安装任何 MCP 服务器。请在上方添加一个 MCP 服务器。',
-    'By using this app, you agree to its': '使用此应用即表示您同意其',
-    'Terms of Service': '服务条款',
-    'Show 2 breakdowns': '显示 2 个明细',
-    'Agent settings and permissions for conversations outside of projects.': '项目外对话的智能体设置和权限。',
-    'Choose a predefined security preset for the agent. This controls terminal auto-execution policy, and file access policy.': '为智能体选择预设安全策略。它会控制终端自动执行策略和文件访问策略。',
-    'Specifies Agent\'s behavior when asking for review on artifacts, which are documents it creates to enable a richer conversation experience.': '指定智能体请求审阅制品时的行为。制品是它创建的文档，用于提供更丰富的对话体验。',
-    'Inherits from global settings. Local permissions have higher priority.': '继承自全局设置。本地权限具有更高优先级。',
-    'Configure allowed and denied paths for file reads and writes.': '配置允许和拒绝文件读写的路径。',
-    'Configure allowed and denied URLs for reading.': '配置允许和拒绝读取的 URL。',
-    'Configure allowed terminal commands.': '配置允许的终端命令。',
-    'Configure allowed commands outside the sandbox.': '配置允许在沙盒外执行的命令。',
-
-    // 输入区相关
-    'Ask anything, @ to mention, / for actions': '提出任何问题，@提及，/采取行动',
-    'to navigate': '导航',
-    'to select': '选择',
-    'to close': '关闭'
+  // 1. Static Translation Dictionary (Pure ASCII Escaped Unicode)
+  const dictionary = {
+    "New Conversation": "\u65b0\u5efa\u5bf9\u8bdd",
+    "Conversation History": "\u5386\u53f2\u5bf9\u8bdd",
+    "Scheduled Tasks": "\u8ba1\u5212\u4efb\u52a1",
+    "Projects": "\u9879\u76ee\u5217\u8868",
+    "Conversations": "\u8fd1\u671f\u5bf9\u8bdd",
+    "Settings": "\u8bbe\u7f6e",
+    "Untitled Conversation": "\u672a\u547d\u540d\u5bf9\u8bdd",
+    "Untitled": "\u672a\u547d\u540d",
+    "No conversations yet": "\u6682\u65e0\u5bf9\u8bdd",
+    "No conversations found": "\u672a\u627e\u5230\u76f8\u5173\u5bf9\u8bdd",
+    "See all": "\u67e5\u770b\u5168\u90e8",
+    "See all conversations": "\u67e5\u770b\u5168\u90e8\u5bf9\u8bdd",
+    "All conversations": "\u5168\u90e8\u5bf9\u8bdd",
+    "Recent Conversations": "\u8fd1\u671f\u5bf9\u8bdd",
+    "Active Conversations": "\u6d3b\u8dc3\u5bf9\u8bdd",
+    "Archived Conversations": "\u5f52\u6863\u5bf9\u8bdd",
+    "Pinned Conversations": "\u7f6e\u9876\u5bf9\u8bdd",
+    "Clear Conversations": "\u6e05\u9664\u5bf9\u8bdd\u8bb0\u5f55",
+    "Clear History": "\u6e05\u9664\u5386\u53f2\u8bb0\u5f55",
+    "Clear All": "\u6e05\u9664\u5168\u90e8",
+    "Clear all history": "\u6e05\u9664\u5168\u90e8\u5386\u53f2\u8bb0\u5f55",
+    "Delete Conversation": "\u5220\u9664\u5bf9\u8bdd",
+    "Delete All Conversations": "\u5220\u9664\u6240\u6709\u5bf9\u8bdd",
+    "Delete Project": "\u5220\u9664\u9879\u76ee",
+    "Export Conversation": "\u5bfc\u51fa\u5bf9\u8bdd",
+    "Import Conversation": "\u5bfc\u5165\u5bf9\u8bdd",
+    "Pin Conversation": "\u7f6e\u9876\u5bf9\u8bdd",
+    "Unpin Conversation": "\u53d6\u6d88\u7f6e\u9876",
+    "Pin to top": "\u7f6e\u9876\u5230\u9876\u90e8",
+    "Unpin from top": "\u53d6\u6d88\u7f6e\u9876",
+    "Collapse All": "\u5168\u90e8\u6298\u53e0",
+    "Expand All": "\u5168\u90e8\u5c55\u5f00",
+    "Collapse sidebar": "\u6298\u53e0\u4fa7\u8fb9\u680f",
+    "Expand sidebar": "\u5c55\u5f00\u4fa7\u8fb9\u680f",
+    "Toggle Sidebar": "\u5207\u6362\u4fa7\u8fb9\u680f",
+    "Toggle History": "\u5207\u6362\u5386\u53f2\u9762\u677f",
+    "Toggle File Tree": "\u5207\u6362\u6587\u4ef6\u6811",
+    "Toggle Terminal": "\u5207\u6362\u7ec8\u7aef\u7a97\u53e3",
+    "Toggle Artifacts": "\u5207\u6362\u4ea7\u7269\u9762\u677f",
+    "Search conversations...": "\u641c\u7d22\u5bf9\u8bdd...",
+    "Search history...": "\u641c\u7d22\u5386\u53f2...",
+    "Search files...": "\u641c\u7d22\u6587\u4ef6...",
+    "Filter by project": "\u6309\u9879\u76ee\u7b5b\u9009",
+    "Filter by date": "\u6309\u65e5\u671f\u7b5b\u9009",
+    "Sort by Date": "\u6309\u65e5\u671f\u6392\u5e8f",
+    "Sort by Name": "\u6309\u540d\u79f0\u6392\u5e8f",
+    "Select Next Conversation": "\u9009\u62e9\u4e0b\u4e00\u4e2a\u5bf9\u8bdd",
+    "Select Previous Conversation": "\u9009\u62e9\u4e0a\u4e00\u4e2a\u5bf9\u8bdd",
+    "Close Conversation": "\u5173\u95ed\u5bf9\u8bdd",
+    "Rename Conversation": "\u91cd\u547d\u540d\u5bf9\u8bdd",
+    "Duplicate Conversation": "\u590d\u5236\u5bf9\u8bdd",
+    "Share Conversation": "\u5206\u4eab\u5bf9\u8bdd",
+    "Copy Link": "\u590d\u5236\u94fe\u63a5",
+    "Copy conversation link": "\u590d\u5236\u5bf9\u8bdd\u94fe\u63a5",
+    "Subagents": "\u5b50\u667a\u80fd\u4f53",
+    "Files Changed": "\u5df2\u4fee\u6539\u6587\u4ef6",
+    "Artifacts": "\u4ea7\u7269",
+    "Uploads": "\u5df2\u4e0a\u4f20\u6587\u4ef6",
+    "Background Tasks": "\u540e\u53f0\u4efb\u52a1",
+    "Active Tasks": "\u8fdb\u884c\u4e2d\u4efb\u52a1",
+    "Completed Tasks": "\u5df2\u5b8c\u6210\u4efb\u52a1",
+    "Failed Tasks": "\u5df2\u5931\u8d25\u4efb\u52a1",
+    "Task Details": "\u4efb\u52a1\u8be6\u60c5",
+    "Task Output": "\u4efb\u52a1\u8f93\u51fa",
+    "Task History": "\u4efb\u52a1\u5386\u53f2",
+    "Task Logs": "\u4efb\u52a1\u65e5\u5fd7",
+    "Stop Task": "\u505c\u6b62\u4efb\u52a1",
+    "Restart Task": "\u91cd\u65b0\u8fd0\u884c\u4efb\u52a1",
+    "Cancel Task": "\u53d6\u6d88\u4efb\u52a1",
+    "Kill Task": "\u7ec8\u6b62\u4efb\u52a1",
+    "Running Tasks": "\u8fd0\u884c\u4e2d\u4efb\u52a1",
+    "No background tasks": "\u6682\u65e0\u540e\u53f0\u4efb\u52a1",
+    "No subagents running": "\u6682\u65e0\u8fd0\u884c\u4e2d\u7684\u5b50\u667a\u80fd\u4f53",
+    "No files changed yet": "\u6682\u65e0\u4fee\u6539\u7684\u6587\u4ef6",
+    "No artifacts generated": "\u6682\u65e0\u751f\u6210\u7684\u4ea7\u7269",
+    "No uploads found": "\u6682\u65e0\u4e0a\u4f20\u6587\u4ef6",
+    "Artifact Preview": "\u4ea7\u7269\u9884\u89c8",
+    "Artifact History": "\u4ea7\u7269\u5386\u53f2",
+    "Artifact Review Policy": "\u4ea7\u7269\u5ba1\u6838\u7b56\u7565",
+    "Download Artifact": "\u4e0b\u8f7d\u4ea7\u7269",
+    "Open Artifact": "\u6253\u5f00\u4ea7\u7269",
+    "Save Artifact": "\u4fdd\u5b58\u4ea7\u7269",
+    "Copy Artifact": "\u590d\u5236\u4ea7\u7269",
+    "View Raw Artifact": "\u67e5\u770b\u539f\u59cb\u4ea7\u7269",
+    "File Changes": "\u6587\u4ef6\u53d8\u66f4",
+    "Diff View": "\u5dee\u5f02\u89c6\u56fe",
+    "Split Diff": "\u5206\u680f\u5dee\u5f02",
+    "Unified Diff": "\u7edf\u4e00\u5dee\u5f02",
+    "Inline Diff": "\u884c\u5185\u5dee\u5f02",
+    "Next Change": "\u4e0b\u4e00\u4e2a\u53d8\u66f4",
+    "Previous Change": "\u4e0a\u4e00\u4e2a\u53d8\u66f4",
+    "Revert File": "\u8fd8\u539f\u6587\u4ef6",
+    "Revert All Files": "\u8fd8\u539f\u5168\u90e8\u6587\u4ef6",
+    "Accept All Changes": "\u63a5\u53d7\u5168\u90e8\u66f4\u6539",
+    "Reject All Changes": "\u62d2\u7edd\u5168\u90e8\u66f4\u6539",
+    "MCP Servers": "MCP \u670d\u52a1",
+    "Installed MCP Servers": "\u5df2\u90e8\u7f72\u7684 MCP \u670d\u52a1",
+    "Add MCP Servers": "\u6dfb\u52a0 MCP \u670d\u52a1",
+    "Add MCP Server": "\u6dfb\u52a0 MCP \u670d\u52a1",
+    "Configure MCP Server": "\u914d\u7f6e MCP \u670d\u52a1",
+    "Edit MCP Server": "\u7f16\u8f91 MCP \u670d\u52a1",
+    "Remove MCP Server": "\u79fb\u9664 MCP \u670d\u52a1",
+    "Enable MCP Server": "\u542f\u7528 MCP \u670d\u52a1",
+    "Disable MCP Server": "\u7981\u7528 MCP \u670d\u52a1",
+    "MCP Server Status": "MCP \u670d\u52a1\u72b6\u6001",
+    "MCP Server Settings": "MCP \u670d\u52a1\u8bbe\u7f6e",
+    "MCP Tools": "MCP \u5de5\u5177",
+    "MCP Resources": "MCP \u8d44\u6e90",
+    "MCP Prompts": "MCP \u63d0\u793a\u8bcd\u6a21\u677f",
+    "MCP Error": "MCP \u5f02\u5e38",
+    "No MCP Servers": "\u6682\u65e0 MCP \u670d\u52a1",
+    "No MCP servers configured": "\u672a\u914d\u7f6e\u4efb\u4f55 MCP \u670d\u52a1",
+    "Configure external tools via Model Context Protocol": "\u901a\u8fc7\u6a21\u578b\u4e0a\u4e0b\u6587\u534f\u8bae (MCP) \u914d\u7f6e\u5916\u90e8\u6269\u5c55\u5de5\u5177",
+    "Configure default behaviors, skills, and MCP servers.": "\u914d\u7f6e\u9ed8\u8ba4\u884c\u4e3a\u3001\u6280\u80fd\u4e0e MCP \u670d\u52a1\u3002",
+    "Configure default behaviors, skills, and MCP servers. Learn more": "\u914d\u7f6e\u9ed8\u8ba4\u884c\u4e3a\u3001\u6280\u80fd\u4e0e MCP \u670d\u52a1\u3002\u4e86\u89e3\u66f4\u591a",
+    "Server Name": "\u670d\u52a1\u540d\u79f0",
+    "Server Command": "\u542f\u52a8\u547d\u4ee4",
+    "Server Arguments": "\u542f\u52a8\u53c2\u6570",
+    "Server Environment Variables": "\u73af\u5883\u53d8\u91cf",
+    "Server Transport": "\u4f20\u8f93\u534f\u8bae",
+    "Stdio Transport": "\u6807\u51c6\u8f93\u5165\u8f93\u51fa (Stdio)",
+    "SSE Transport": "\u670d\u52a1\u7aef\u63a8\u9001\u4e8b\u4ef6 (SSE)",
+    "Server URL": "\u670d\u52a1\u5730\u5740 (URL)",
+    "Connect MCP Server": "\u8fde\u63a5 MCP \u670d\u52a1",
+    "Disconnect MCP Server": "\u65ad\u5f00 MCP \u670d\u52a1",
+    "Reconnect MCP Server": "\u91cd\u65b0\u8fde\u63a5 MCP \u670d\u52a1",
+    "MCP Server Connected": "MCP \u670d\u52a1\u5df2\u8fde\u63a5",
+    "MCP Server Disconnected": "MCP \u670d\u52a1\u5df2\u65ad\u5f00",
+    "MCP Server Connecting...": "MCP \u670d\u52a1\u8fde\u63a5\u4e2d...",
+    "MCP Server Failed": "MCP \u670d\u52a1\u542f\u52a8\u5931\u8d25",
+    "Tool Approval Policy": "\u5de5\u5177\u8c03\u7528\u5ba1\u6279\u7b56\u7565",
+    "Always Approve Tool": "\u59cb\u7ec8\u6279\u51c6\u8be5\u5de5\u5177",
+    "Ask Before Executing Tool": "\u6267\u884c\u5de5\u5177\u524d\u8be2\u95ee",
+    "Block Tool Execution": "\u963b\u6b62\u8be5\u5de5\u5177\u6267\u884c",
+    "Tool Call Parameters": "\u5de5\u5177\u8c03\u7528\u53c2\u6570",
+    "Tool Call Result": "\u5de5\u5177\u8c03\u7528\u8fd4\u56de\u7ed3\u679c",
+    "Tool Execution Timeout": "\u5de5\u5177\u6267\u884c\u8d85\u65f6",
+    "Tool Execution Error": "\u5de5\u5177\u6267\u884c\u62a5\u9519",
+    "Create Project": "\u521b\u5efa\u9879\u76ee",
+    "Open Project": "\u6253\u5f00\u9879\u76ee",
+    "Open Workspace": "\u6253\u5f00\u5de5\u4f5c\u533a",
+    "Add Workspace": "\u6dfb\u52a0\u5de5\u4f5c\u533a",
+    "Add Folder to Workspace": "\u6dfb\u52a0\u6587\u4ef6\u5939\u5230\u5de5\u4f5c\u533a",
+    "Remove Folder from Workspace": "\u4ece\u5de5\u4f5c\u533a\u79fb\u9664\u6587\u4ef6\u5939",
+    "Workspace Settings": "\u5de5\u4f5c\u533a\u8bbe\u7f6e",
+    "Workspace Root": "\u5de5\u4f5c\u533a\u6839\u76ee\u5f55",
+    "Multi-Folder Workspace": "\u591a\u6587\u4ef6\u5939\u5de5\u4f5c\u533a",
+    "Project Settings": "\u9879\u76ee\u8bbe\u7f6e",
+    "Project-Specific Settings": "\u9879\u76ee\u4e13\u5c5e\u8bbe\u7f6e",
+    "Not in Project": "\u975e\u9879\u76ee\u5bf9\u8bdd",
+    "In Project": "\u5f53\u524d\u9879\u76ee",
+    "Switch Project": "\u5207\u6362\u9879\u76ee",
+    "Close Project": "\u5173\u95ed\u9879\u76ee",
+    "File Picker": "\u6587\u4ef6\u9009\u62e9\u5668",
+    "File Access Rules": "\u6587\u4ef6\u8bbf\u95ee\u89c4\u5219",
+    "File Permissions": "\u6587\u4ef6\u6743\u9650",
+    "Open File": "\u6253\u5f00\u6587\u4ef6",
+    "Open Folder": "\u6253\u5f00\u6587\u4ef6\u5939",
+    "Reveal in File Explorer": "\u5728\u8d44\u6e90\u7ba1\u7406\u5668\u4e2d\u663e\u793a",
+    "Reveal in Finder": "\u5728\u8bbf\u8fbe\u4e2d\u663e\u793a",
+    "Copy Path": "\u590d\u5236\u8def\u5f84",
+    "Copy Relative Path": "\u590d\u5236\u76f8\u5bf9\u8def\u5f84",
+    "Refresh File Tree": "\u5237\u65b0\u6587\u4ef6\u6811",
+    "New File": "\u65b0\u5efa\u6587\u4ef6",
+    "New Folder": "\u65b0\u5efa\u6587\u4ef6\u5939",
+    "Rename File": "\u91cd\u547d\u540d\u6587\u4ef6",
+    "Delete File": "\u5220\u9664\u6587\u4ef6",
+    "Save File": "\u4fdd\u5b58\u6587\u4ef6",
+    "Save All Files": "\u4fdd\u5b58\u6240\u6709\u6587\u4ef6",
+    "Open in Terminal": "\u5728\u7ec8\u7aef\u4e2d\u6253\u5f00",
+    "Open in External Editor": "\u5728\u5916\u90e8\u7f16\u8f91\u5668\u4e2d\u6253\u5f00",
+    "Open in VS Code": "\u5728 VS Code \u4e2d\u6253\u5f00",
+    "Open in Antigravity IDE": "\u5728 Antigravity IDE \u4e2d\u6253\u5f00",
+    "Models": "\u6a21\u578b\u5217\u8868",
+    "All models": "\u5168\u90e8\u6a21\u578b",
+    "Selected Model": "\u5f53\u524d\u9009\u4e2d\u6a21\u578b",
+    "Switch Model": "\u5207\u6362\u6a21\u578b",
+    "Select a model": "\u9009\u62e9\u4e00\u4e2a\u6a21\u578b",
+    "Add Custom Model": "\u6dfb\u52a0\u81ea\u5b9a\u4e49\u6a21\u578b",
+    "Edit Custom Model": "\u7f16\u8f91\u81ea\u5b9a\u4e49\u6a21\u578b",
+    "Delete Custom Model": "\u5220\u9664\u81ea\u5b9a\u4e49\u6a21\u578b",
+    "Toggle Model Selector": "\u5207\u6362\u6a21\u578b\u9009\u62e9\u5668",
+    "Model Parameters": "\u6a21\u578b\u53c2\u6570\u914d\u7f6e",
+    "Model Configuration": "\u6a21\u578b\u914d\u7f6e",
+    "Model Quota": "\u6a21\u578b\u914d\u989d",
+    "Model Credits": "\u6a21\u578b\u70b9\u6570",
+    "Temperature": "\u6e29\u5ea6\u53c2\u6570",
+    "Top P": "Top P \u91c7\u6837",
+    "Top K": "\u5019\u9009\u6570\u91cf (Top K)",
+    "Max Tokens": "\u6700\u5927 Token \u6570",
+    "Max Output Tokens": "\u6700\u5927\u8f93\u51fa Token \u6570",
+    "Context Window": "\u4e0a\u4e0b\u6587\u7a97\u53e3",
+    "Token Usage": "Token \u4f7f\u7528\u91cf",
+    "Prompt Tokens": "\u63d0\u793a\u8bcd Token \u6570",
+    "Completion Tokens": "\u8865\u5168 Token \u6570",
+    "Total Tokens": "\u603b Token \u6570",
+    "Quota Exceeded": "\u914d\u989d\u5df2\u7528\u5c3d",
+    "Daily Quota Exceeded": "\u6bcf\u65e5\u914d\u989d\u5df2\u7528\u5c3d",
+    "Monthly Quota Exceeded": "\u6bcf\u6708\u914d\u989d\u5df2\u7528\u5c3d",
+    "Rate Limit Reached": "\u5df2\u8fbe\u5230\u901f\u7387\u9650\u5236",
+    "Please try again later": "\u8bf7\u7a0d\u540e\u518d\u8bd5",
+    "Credits Balance": "\u8d26\u6237\u70b9\u6570\u4f59\u989d",
+    "Available AI Credits": "\u53ef\u7528 AI \u70b9\u6570",
+    "Available AI Credits:": "\u53ef\u7528 AI \u70b9\u6570\uff1a",
+    "Get More AI Credits": "\u83b7\u53d6\u66f4\u591a AI \u70b9\u6570",
+    "Purchase Credits": "\u8d2d\u4e70\u70b9\u6570",
+    "Daily Quota": "\u6bcf\u65e5\u514d\u8d39\u914d\u989d",
+    "Monthly Quota": "\u6bcf\u6708\u914d\u989d",
+    "Unlimited": "\u65e0\u9650\u5236",
+    "Refreshes in": "\u91cd\u7f6e\u5012\u8ba1\u65f6",
+    "Refreshes daily": "\u6bcf\u65e5\u91cd\u7f6e",
+    "Refreshes monthly": "\u6bcf\u6708\u91cd\u7f6e",
+    "Your Plan: Google AI Ultra": "\u5f53\u524d\u5957\u9910\uff1aGoogle AI Ultra",
+    "Your Plan: Google AI Pro": "\u5f53\u524d\u5957\u9910\uff1aGoogle AI Pro",
+    "Your Plan: Free Tier": "\u8ba2\u9605\u8ba1\u5212\uff1a\u514d\u8d39\u7248",
+    "Upgrade Plan": "\u5347\u7ea7\u8ba2\u9605\u8ba1\u5212",
+    "Manage Subscription": "\u7ba1\u7406\u8ba2\u9605",
+    "AI Credit Overages": "\u5141\u8bb8\u8d85\u51fa\u914d\u989d\u540e\u6263\u9664\u70b9\u6570",
+    "Enable AI Credit Overages": "\u5f00\u542f\u70b9\u6570\u8d85\u989d\u6263\u8d39",
+    "Disable AI Credit Overages": "\u5173\u95ed\u70b9\u6570\u8d85\u989d\u6263\u8d39",
+    "View your available model quota and AI credits. Model quota refreshes periodically based on your plan. Enable AI Credit Overages to continue using models when your quota is exhausted.": "\u67e5\u770b\u60a8\u53ef\u7528\u7684\u6a21\u578b\u914d\u989d\u548c AI \u70b9\u6570\u3002\u6a21\u578b\u914d\u989d\u4f1a\u6839\u636e\u60a8\u7684\u8ba2\u9605\u8ba1\u5212\u5b9a\u671f\u91cd\u7f6e\u3002\u5f00\u542f\u5141\u8bb8\u8d85\u51fa\u989d\u5ea6\u540e\u6263\u9664\u70b9\u6570\uff0c\u53ef\u5728\u914d\u989d\u8017\u5c3d\u540e\u7ee7\u7eed\u4f7f\u7528\u6a21\u578b\u3002",
+    "You can upgrade to a Google AI Ultra plan to receive the highest rate limits": "\u60a8\u53ef\u4ee5\u5347\u7ea7\u5230 Google AI Ultra \u65d7\u8230\u8ba1\u5212\u4ee5\u83b7\u53d6\u6700\u9ad8\u901f\u7387\u9650\u5236\u4e0e\u4f18\u5148\u5e76\u53d1\u5904\u7406",
+    "High demand: rate limits currently lowered": "\u5f53\u524d\u8bf7\u6c42\u91cf\u8f83\u5927\uff1a\u901f\u7387\u9650\u5236\u5df2\u4e34\u65f6\u4e0b\u8c03",
+    "Agent Security Settings": "\u667a\u80fd\u4f53\u5b89\u5168\u8bbe\u7f6e",
+    "Agent Behavior": "\u667a\u80fd\u4f53\u884c\u4e3a",
+    "Agent Settings": "\u667a\u80fd\u4f53\u8bbe\u7f6e",
+    "Agent Team": "\u667a\u80fd\u4f53\u534f\u4f5c\u56e2\u961f",
+    "Security Preset": "\u5b89\u5168\u9884\u8bbe\u7b56\u7565",
+    "Strict Mode": "\u4e25\u683c\u5b89\u5168\u6a21\u5f0f",
+    "Standard Mode": "\u6807\u51c6\u5b89\u5168\u6a21\u5f0f",
+    "Permissive Mode": "\u5bbd\u677e\u4fe1\u4efb\u6a21\u5f0f",
+    "Agent always asks for review.": "\u667a\u80fd\u4f53\u5c06\u59cb\u7ec8\u8bf7\u6c42\u5ba1\u6838\u3002",
+    "Agent cannot modify files outside of the workspace in strict mode.": "\u5728\u4e25\u683c\u6a21\u5f0f\u4e0b\uff0c\u667a\u80fd\u4f53\u65e0\u6cd5\u4fee\u6539\u5de5\u4f5c\u533a\u5916\u7684\u6587\u4ef6\u3002",
+    "Agent will always ask to review in strict mode.": "\u5728\u4e25\u683c\u6a21\u5f0f\u4e0b\uff0c\u667a\u80fd\u4f53\u5c06\u59cb\u7ec8\u8bf7\u6c42\u5ba1\u6838\u3002",
+    "Agents have full access to your machine and external resources.": "\u667a\u80fd\u4f53\u5bf9\u60a8\u7684\u8ba1\u7b97\u673a\u548c\u5916\u90e8\u8d44\u6e90\u62e5\u6709\u5b8c\u5168\u8bbf\u95ee\u6743\u9650\u3002",
+    "Agent settings and permissions for conversations outside of projects": "\u9002\u7528\u4e8e\u975e\u9879\u76ee\u5bf9\u8bdd\u7684\u667a\u80fd\u4f53\u5168\u5c40\u8bbe\u7f6e\u4e0e\u6743\u9650",
+    "A shell setup script run before every command the agent executes.": "\u5728\u667a\u80fd\u4f53\u6267\u884c\u6bcf\u6761\u547d\u4ee4\u524d\u8fd0\u884c\u7684 Shell \u521d\u59cb\u5316\u811a\u672c\u3002",
+    "Agent Auto-Fix Lints": "\u667a\u80fd\u4f53\u81ea\u52a8\u4fee\u590d\u4ee3\u7801 Lint \u9519\u8bef",
+    "Agent Non-Workspace File Access": "\u667a\u80fd\u4f53\u5de5\u4f5c\u533a\u5916\u6587\u4ef6\u8bbf\u95ee\u6743\u9650",
+    "Agent Script Command Configuration": "\u667a\u80fd\u4f53\u811a\u672c\u4e0e\u547d\u4ee4\u914d\u7f6e",
+    "Terminal Command Execution Policy": "\u7ec8\u7aef\u547d\u4ee4\u6267\u884c\u7b56\u7565",
+    "Terminal Execution Policy": "\u7ec8\u7aef\u6267\u884c\u7b56\u7565",
+    "Terminal Commands": "\u7ec8\u7aef\u547d\u4ee4",
+    "Commands Outside Sandbox": "\u6c99\u7bb1\u5916\u6267\u884c\u547d\u4ee4",
+    "Allow commands outside sandbox": "\u5141\u8bb8\u5728\u6c99\u7bb1\u5916\u90e8\u6267\u884c\u547d\u4ee4",
+    "Requires confirmation for dangerous operations": "\u5371\u9669\u64cd\u4f5c\u9700\u8981\u7528\u6237\u4e8c\u6b21\u786e\u8ba4",
+    "File Access Policy": "\u6587\u4ef6\u8bbf\u95ee\u7b56\u7565",
+    "Network Access Policy": "\u7f51\u7edc\u8bbf\u95ee\u7b56\u7565",
+    "Network Permissions": "\u7f51\u7edc\u8bbf\u95ee\u6743\u9650",
+    "Local Permissions": "\u672c\u5730\u6743\u9650",
+    "Actuation Permissions": "\u81ea\u4e3b\u6267\u884c\u6743\u9650",
+    "Browser Actuation Rules": "\u6d4f\u89c8\u5668\u81ea\u4e3b\u64cd\u4f5c\u89c4\u5219",
+    "Browser Javascript Execution Policy": "\u6d4f\u89c8\u5668 JS \u811a\u672c\u6267\u884c\u7b56\u7565",
+    "Read-only mode": "\u53ea\u8bfb\u6a21\u5f0f",
+    "Read and Write": "\u8bfb\u5199\u6a21\u5f0f",
+    "Full Access": "\u5b8c\u5168\u8bbf\u95ee",
+    "Restricted Access": "\u53d7\u9650\u8bbf\u95ee",
+    "Blocked by Policy": "\u5df2\u88ab\u5b89\u5168\u7b56\u7565\u62e6\u622a",
+    "Allow": "\u5141\u8bb8",
+    "Deny": "\u62d2\u7edd",
+    "Always Allow": "\u59cb\u7ec8\u5141\u8bb8",
+    "Always Deny": "\u59cb\u7ec8\u62d2\u7edd",
+    "Always Proceed": "\u59cb\u7ec8\u7ee7\u7eed",
+    "Always Ask": "\u59cb\u7ec8\u8be2\u95ee",
+    "Ask before running": "\u8fd0\u884c\u524d\u8be2\u95ee",
+    "Ask every time": "\u6bcf\u6b21\u90fd\u8be2\u95ee",
+    "Never ask": "\u4ece\u4e0d\u8be2\u95ee",
+    "Confirm Command Execution": "\u786e\u8ba4\u547d\u4ee4\u6267\u884c",
+    "Do you want to run this command?": "\u60a8\u786e\u5b9a\u8981\u6267\u884c\u6b64\u7ec8\u7aef\u547d\u4ee4\u5417\uff1f",
+    "Dangerous Command Detected": "\u68c0\u6d4b\u5230\u9ad8\u5371\u547d\u4ee4",
+    "This command may modify system files or execute external binaries.": "\u6b64\u547d\u4ee4\u53ef\u80fd\u4f1a\u4fee\u6539\u7cfb\u7edf\u6587\u4ef6\u6216\u6267\u884c\u5916\u90e8\u4e8c\u8fdb\u5236\u7a0b\u5e8f\uff0c\u8bf7\u8c28\u614e\u6838\u5bf9\u3002",
+    "Appearance": "\u5916\u89c2\u6837\u5f0f",
+    "Theme Mode": "\u914d\u8272\u4e3b\u9898\u6a21\u5f0f",
+    "Follow System Theme": "\u8ddf\u968f\u7cfb\u7edf\u4e3b\u9898",
+    "Follow System": "\u8ddf\u968f\u7cfb\u7edf",
+    "Light Theme": "\u6d45\u8272\u4e3b\u9898",
+    "Dark Theme": "\u6df1\u8272\u4e3b\u9898",
+    "High Contrast Theme": "\u9ad8\u5bf9\u6bd4\u5ea6\u4e3b\u9898",
+    "Color Theme": "\u989c\u8272\u4e3b\u9898",
+    "Font Family": "\u754c\u9762\u5b57\u4f53",
+    "Font Size": "\u5b57\u53f7\u5927\u5c0f",
+    "Editor Font Size": "\u7f16\u8f91\u5668\u5b57\u53f7",
+    "Terminal Font Size": "\u7ec8\u7aef\u5b57\u53f7",
+    "Line Height": "\u884c\u9ad8",
+    "Zoom Factor": "\u7f29\u653e\u6bd4\u4f8b",
+    "Zoom In": "\u653e\u5927",
+    "Zoom Out": "\u7f29\u5c0f",
+    "Reset Zoom": "\u91cd\u7f6e\u7f29\u653e",
+    "Custom CSS": "\u81ea\u5b9a\u4e49\u6837\u5f0f\u8868 (CSS)",
+    "Customizations": "\u81ea\u5b9a\u4e49\u529f\u80fd",
+    "Browser": "\u6d4f\u89c8\u5668\u52a9\u624b",
+    "Browser Settings": "\u6d4f\u89c8\u5668\u8bbe\u7f6e",
+    "App": "\u5ba2\u6237\u7aef\u8bbe\u7f6e",
+    "App Settings": "\u5e94\u7528\u8bbe\u7f6e",
+    "Chat Settings": "\u804a\u5929\u8bbe\u7f6e",
+    "Account": "\u8d26\u6237\u8bbe\u7f6e",
+    "Permissions": "\u6743\u9650\u63a7\u5236",
+    "Advanced Settings": "\u9ad8\u7ea7\u8bbe\u7f6e",
+    "RECOMMENDED": "\u63a8\u8350\u5feb\u6377\u952e",
+    "NAVIGATION": "\u754c\u9762\u5bfc\u822a",
+    "CONVERSATION": "\u5bf9\u8bdd\u4ea4\u4e92",
+    "SHORTCUTS": "\u5feb\u6377\u952e",
+    "Keyboard Shortcuts": "\u952e\u76d8\u5feb\u6377\u952e",
+    "Keybindings": "\u6309\u952e\u7ed1\u5b9a",
+    "Open Conversation Picker": "\u6253\u5f00\u5bf9\u8bdd\u9009\u62e9\u5668",
+    "Open File Search": "\u6253\u5f00\u6587\u4ef6\u641c\u7d22",
+    "Open Settings": "\u6253\u5f00\u8bbe\u7f6e",
+    "Open Documentation": "\u6253\u5f00\u5b98\u65b9\u6587\u6863",
+    "Open Logs Folder": "\u6253\u5f00\u65e5\u5fd7\u76ee\u5f55",
+    "Restart Language Server": "\u91cd\u542f\u8bed\u8a00\u670d\u52a1\u7aef",
+    "Command Palette": "\u547d\u4ee4\u9762\u677f",
+    "Focus Input": "\u805a\u7126\u8f93\u5165\u6846",
+    "Toggle Developer Tools": "\u5207\u6362\u5f00\u53d1\u8005\u5de5\u5177",
+    "Toggle Full Screen": "\u5207\u6362\u5168\u5c4f",
+    "Keep Computer Awake": "\u9632\u6b62\u8ba1\u7b97\u673a\u4f11\u7720",
+    "Run in Background": "\u5728\u540e\u53f0\u4fdd\u6301\u8fd0\u884c",
+    "Minimize to Tray": "\u6700\u5c0f\u5316\u5230\u7cfb\u7edf\u6258\u76d8",
+    "Close to Tray": "\u5173\u95ed\u65f6\u6700\u5c0f\u5316\u5230\u6258\u76d8",
+    "Start at Login": "\u5f00\u673a\u81ea\u542f\u52a8",
+    "Provide Feedback": "\u63d0\u4ea4\u53cd\u9988",
+    "Send Feedback": "\u53d1\u9001\u53cd\u9988",
+    "Feedback Type": "\u53cd\u9988\u7c7b\u578b",
+    "Bug Report": "\u7f3a\u9677\u62a5\u544a",
+    "Feature Request": "\u529f\u80fd\u9700\u6c42",
+    "Auth and Billing": "\u8d26\u6237\u4e0e\u8d26\u5355",
+    "General Feedback": "\u5e38\u89c4\u53cd\u9988",
+    "Description": "\u95ee\u9898\u63cf\u8ff0",
+    "Steps to reproduce the issue": "\u91cd\u73b0\u6b65\u9aa4",
+    "Steps to Reproduce": "\u91cd\u73b0\u6b65\u9aa4\u8bf4\u660e",
+    "Expected behavior": "\u671f\u671b\u7ed3\u679c",
+    "Actual behavior": "\u5b9e\u9645\u7ed3\u679c",
+    "Any error messages": "\u9519\u8bef\u63d0\u793a\u4fe1\u606f",
+    "Any relevant information": "\u5176\u4ed6\u76f8\u5173\u4fe1\u606f",
+    "Describe the bug you encountered...": "\u8bf7\u8be6\u7ec6\u63cf\u8ff0\u60a8\u9047\u5230\u7684\u7f3a\u9677(Bug)...",
+    "Describe your feature request...": "\u8bf7\u8be6\u7ec6\u63cf\u8ff0\u60a8\u671f\u5f85\u7684\u65b0\u529f\u80fd\u6216\u6539\u8fdb\u5efa\u8bae...",
+    "Attach Screenshots": "\u9644\u52a0\u622a\u56fe",
+    "Attach Diagnostic Logs": "\u9644\u5e26\u8bca\u65ad\u65e5\u5fd7",
+    "Submit Feedback": "\u63d0\u4ea4\u53cd\u9988",
+    "Thank you for your feedback!": "\u611f\u8c22\u60a8\u7684\u5b9d\u8d35\u53cd\u9988\uff01",
+    "Report an Issue": "\u62a5\u544a\u95ee\u9898",
+    "Community Discord": "\u52a0\u5165 Discord \u793e\u533a",
+    "Terms of Service": "\u670d\u52a1\u6761\u6b3e",
+    "Privacy Policy": "\u9690\u79c1\u653f\u7b56",
+    "About Antigravity": "\u5173\u4e8e Antigravity",
+    "Documentation": "\u5b98\u65b9\u6587\u6863",
+    "Docs": "\u5b98\u65b9\u6587\u6863",
+    "Help": "\u5e2e\u52a9",
+    "Version": "\u5ba2\u6237\u7aef\u7248\u672c",
+    "Check for Updates": "\u68c0\u67e5\u66f4\u65b0",
+    "Loading Antigravity": "\u6b63\u5728\u52a0\u8f7d Antigravity",
+    "Setting up...": "\u6b63\u5728\u521d\u59cb\u5316\u8bbe\u7f6e...",
+    "Welcome to Antigravity": "\u6b22\u8fce\u4f7f\u7528 Antigravity",
+    "Welcome to the new Antigravity!": "\u6b22\u8fce\u4f7f\u7528\u5168\u65b0\u5347\u7ea7\u7684 Antigravity\uff01",
+    "Antigravity has been redesigned to put agents first with new capabilities. If you'd still like a code editor, you can download it as a separate app named Antigravity IDE.": "Antigravity \u73b0\u5df2\u5168\u9762\u5347\u7ea7\u4e3a\u4ee5\u667a\u80fd\u4f53\u4e3a\u6838\u5fc3\u7684\u5168\u65b0\u67b6\u6784\u3002\u5982\u679c\u60a8\u4ecd\u9700\u4f20\u7edf\u7684\u4ee3\u7801\u7f16\u8f91\u529f\u80fd\uff0c\u53ef\u4ee5\u5355\u72ec\u4e0b\u8f7d\u540d\u4e3a Antigravity IDE \u7684\u914d\u5957\u7f16\u8f91\u5668\u3002",
+    "Download the Antigravity IDE": "\u4e0b\u8f7d Antigravity IDE \u7f16\u8f91\u5668",
+    "Explore the new Antigravity": "\u7acb\u5373\u4f53\u9a8c\u5168\u65b0 Antigravity",
+    "Install IDE": "\u5b89\u88c5 IDE \u63d2\u4ef6",
+    "Installing IDE...": "\u6b63\u5728\u5b89\u88c5 IDE...",
+    "IDE Installation Complete": "IDE \u5b89\u88c5\u5b8c\u6210",
+    "IDE Installation Failed": "IDE \u5b89\u88c5\u5931\u8d25",
+    "Launch IDE": "\u542f\u52a8 IDE",
+    "Get Started": "\u5f00\u59cb\u4f7f\u7528",
+    "Skip for now": "\u6682\u65f6\u8df3\u8fc7",
+    "Next": "\u4e0b\u4e00\u6b65",
+    "Back": "\u4e0a\u4e00\u6b65",
+    "Finish": "\u5b8c\u6210",
+    "Continue": "\u7ee7\u7eed",
+    "File": "\u6587\u4ef6",
+    "Edit": "\u7f16\u8f91",
+    "View": "\u89c6\u56fe",
+    "Window": "\u7a97\u53e3",
+    "New Window": "\u65b0\u5efa\u7a97\u53e3",
+    "Close Window": "\u5173\u95ed\u7a97\u53e3",
+    "Minimize": "\u6700\u5c0f\u5316",
+    "Maximize": "\u6700\u5927\u5316",
+    "Zoom": "\u7f29\u653e",
+    "Bring All to Front": "\u524d\u7f6e\u5168\u90e8\u7a97\u53e3",
+    "Cut": "\u526a\u5207",
+    "Copy": "\u590d\u5236",
+    "Paste": "\u7c98\u8d34",
+    "Paste and Match Style": "\u7c98\u8d34\u5e76\u5339\u914d\u6837\u5f0f",
+    "Select All": "\u5168\u9009",
+    "Undo": "\u64a4\u9500",
+    "Redo": "\u91cd\u505a",
+    "Speech": "\u8bed\u97f3",
+    "Start Dictation": "\u5f00\u59cb\u542c\u5199",
+    "Emoji & Symbols": "\u8868\u60c5\u4e0e\u7279\u6b8a\u7b26\u53f7",
+    "Hide Antigravity": "\u9690\u85cf Antigravity",
+    "Hide Others": "\u9690\u85cf\u5176\u4ed6\u5e94\u7528",
+    "Show All": "\u663e\u793a\u5168\u90e8",
+    "Quit Antigravity": "\u9000\u51fa Antigravity",
+    "Quit": "\u9000\u51fa",
+    "Exit": "\u9000\u51fa",
+    "Restart": "\u91cd\u542f",
+    "Restart Antigravity": "\u91cd\u542f Antigravity",
+    "Updates": "\u8f6f\u4ef6\u66f4\u65b0",
+    "Check for Updates...": "\u68c0\u67e5\u66f4\u65b0...",
+    "Checking for Updates...": "\u6b63\u5728\u68c0\u67e5\u66f4\u65b0...",
+    "Downloading Update...": "\u6b63\u5728\u4e0b\u8f7d\u66f4\u65b0...",
+    "Update Available": "\u53d1\u73b0\u65b0\u7248\u672c",
+    "Update Downloaded": "\u66f4\u65b0\u5df2\u5c31\u7eea",
+    "Restart to Update": "\u91cd\u542f\u4ee5\u5b8c\u6210\u66f4\u65b0",
+    "Up to date": "\u5df2\u662f\u6700\u65b0\u7248\u672c",
+    "No updates available": "\u5f53\u524d\u5df2\u662f\u6700\u65b0\u7248\u672c\uff0c\u6682\u65e0\u53ef\u7528\u66f4\u65b0",
+    "Notification Settings": "\u901a\u77e5\u8bbe\u7f6e",
+    "Enable Desktop Notifications": "\u542f\u7528\u684c\u9762\u7cfb\u7edf\u901a\u77e5",
+    "Sound Effects": "\u64cd\u4f5c\u97f3\u6548",
+    "No agent running": "\u6682\u65e0\u8fd0\u884c\u4e2d\u7684\u667a\u80fd\u4f53",
+    "No agents running": "\u6682\u65e0\u8fd0\u884c\u4e2d\u7684\u667a\u80fd\u4f53",
+    "1 agent running": "1 \u4e2a\u667a\u80fd\u4f53\u6b63\u5728\u8fd0\u884c",
+    "agents running": "\u4e2a\u667a\u80fd\u4f53\u6b63\u5728\u8fd0\u884c",
+    "Review": "\u5ba1\u6838",
+    "Review Changes": "\u5ba1\u6838\u66f4\u6539",
+    "Review this code": "\u5ba1\u6838\u6b64\u4ee3\u7801",
+    "Review my design": "\u5ba1\u6838\u6211\u7684\u8bbe\u8ba1",
+    "Review Step": "\u5ba1\u6838\u6b65\u9aa4",
+    "Accept": "\u63a5\u53d7",
+    "Reject": "\u62d2\u7edd",
+    "Accept Step": "\u63a5\u53d7\u6b65\u9aa4",
+    "Reject Step": "\u62d2\u7edd\u6b65\u9aa4",
+    "Accept All": "\u63a5\u53d7\u5168\u90e8",
+    "Reject All": "\u62d2\u7edd\u5168\u90e8",
+    "Action Required": "\u9700\u8981\u64cd\u4f5c",
+    "User Approval Required": "\u9700\u8981\u7528\u6237\u786e\u8ba4\u5ba1\u6279",
+    "Apply": "\u5e94\u7528",
+    "Apply Changes": "\u5e94\u7528\u66f4\u6539",
+    "Discard": "\u653e\u5f03",
+    "Discard Changes": "\u653e\u5f03\u66f4\u6539",
+    "Revert": "\u8fd8\u539f",
+    "Revert Changes": "\u64a4\u9500\u66f4\u6539",
+    "Keep Changes": "\u4fdd\u7559\u66f4\u6539",
+    "Compare Changes": "\u5bf9\u6bd4\u5dee\u5f02",
+    "Modified": "\u5df2\u4fee\u6539",
+    "Created": "\u5df2\u65b0\u5efa",
+    "Deleted": "\u5df2\u5220\u9664",
+    "Renamed": "\u5df2\u91cd\u547d\u540d",
+    "Pending Review": "\u7b49\u5f85\u5ba1\u6838\u4e2d",
+    "Approved": "\u5df2\u6279\u51c6",
+    "Rejected": "\u5df2\u62d2\u7edd",
+    "Thinking...": "\u601d\u8003\u4e2d...",
+    "Working...": "\u5904\u7406\u4e2d...",
+    "Planning...": "\u89c4\u5212\u4e2d...",
+    "Executing...": "\u6267\u884c\u4e2d...",
+    "Searching...": "\u641c\u7d22\u4e2d...",
+    "Reading files...": "\u8bfb\u53d6\u6587\u4ef6\u4e2d...",
+    "Writing files...": "\u5199\u5165\u6587\u4ef6\u4e2d...",
+    "Running command...": "\u6267\u884c\u547d\u4ee4\u4e2d...",
+    "Agent finished": "\u667a\u80fd\u4f53\u5df2\u5b8c\u6210",
+    "Agent finished.": "\u667a\u80fd\u4f53\u5df2\u5b8c\u6210\u3002",
+    "Agent execution finished": "\u667a\u80fd\u4f53\u6267\u884c\u5b8c\u6210",
+    "Agent execution failed": "\u667a\u80fd\u4f53\u6267\u884c\u5931\u8d25",
+    "Agent execution failed.": "\u667a\u80fd\u4f53\u6267\u884c\u5931\u8d25\u3002",
+    "Agent paused": "\u667a\u80fd\u4f53\u5df2\u6682\u505c",
+    "Agent stopped": "\u667a\u80fd\u4f53\u5df2\u505c\u6b62",
+    "Agent response": "\u667a\u80fd\u4f53\u56de\u590d",
+    "Stop": "\u505c\u6b62",
+    "Stop generating": "\u505c\u6b62\u751f\u6210",
+    "Stop Execution": "\u505c\u6b62\u6267\u884c",
+    "Pause": "\u6682\u505c",
+    "Resume": "\u7ee7\u7eed\u6267\u884c",
+    "Regenerate": "\u91cd\u65b0\u751f\u6210",
+    "Regenerate Response": "\u91cd\u65b0\u751f\u6210\u56de\u590d",
+    "Retry": "\u91cd\u8bd5",
+    "Try Again": "\u518d\u6b21\u5c1d\u8bd5",
+    "Copied!": "\u5df2\u590d\u5236\uff01",
+    "Copied to clipboard": "\u5df2\u590d\u5236\u5230\u526a\u8d34\u677f",
+    "Copy code": "\u590d\u5236\u4ee3\u7801",
+    "Copy message": "\u590d\u5236\u6d88\u606f",
+    "Ask anything, @ to mention, / for actions": "\u95ee\u6211\u4efb\u4f55\u95ee\u9898\uff0c\u7528 @ \u63d0\u53ca\u6587\u4ef6\uff0c\u7528 / \u6267\u884c\u52a8\u4f5c",
+    "Ask a question or provide instructions...": "\u8bf7\u8f93\u5165\u60a8\u7684\u95ee\u9898\u6216\u5177\u4f53\u6307\u4ee4...",
+    "Type a message...": "\u8f93\u5165\u6d88\u606f...",
+    "Type / for commands...": "\u8f93\u5165 / \u67e5\u770b\u53ef\u7528\u547d\u4ee4...",
+    "Add context": "\u6dfb\u52a0\u4e0a\u4e0b\u6587",
+    "Add to Chat": "\u6dfb\u52a0\u5230\u5bf9\u8bdd",
+    "Add to Chat/Quote": "\u6dfb\u52a0\u5230\u5bf9\u8bdd/\u5f15\u7528",
+    "Add files to context": "\u6dfb\u52a0\u6587\u4ef6\u5230\u4e0a\u4e0b\u6587",
+    "Mention file or folder": "\u63d0\u53ca\u6587\u4ef6\u6216\u6587\u4ef6\u5939",
+    "Attach File": "\u9644\u52a0\u6587\u4ef6",
+    "Attach Image": "\u9644\u52a0\u56fe\u7247",
+    "Drop files here to upload": "\u62d6\u62fd\u6587\u4ef6\u81f3\u6b64\u5904\u4e0a\u4f20",
+    "Upload File": "\u4e0a\u4f20\u6587\u4ef6",
+    "Upload Folder": "\u4e0a\u4f20\u6587\u4ef6\u5939",
+    "New Task": "\u65b0\u5efa\u4efb\u52a1",
+    "Open": "\u6253\u5f00",
+    "Save": "\u4fdd\u5b58",
+    "Close": "\u5173\u95ed",
+    "Cancel": "\u53d6\u6d88",
+    "Delete": "\u5220\u9664",
+    "Rename": "\u91cd\u547d\u540d",
+    "Customize": "\u5b9a\u5236",
+    "Default": "\u9ed8\u8ba4",
+    "Custom": "\u81ea\u5b9a\u4e49",
+    "System": "\u8ddf\u968f\u7cfb\u7edf",
+    "Turbo Mode": "\u6781\u901f\u6a21\u5f0f",
+    "Turbo mode": "\u6781\u901f\u6a21\u5f0f",
+    "Full Machine": "\u5b8c\u5168\u8bbf\u95ee",
+    "Search": "\u641c\u7d22",
+    "Filter": "\u7b5b\u9009",
+    "Refresh": "\u5237\u65b0",
+    "Reset": "\u91cd\u7f6e",
+    "OK": "\u786e\u5b9a",
+    "Confirm": "\u786e\u8ba4",
+    "Done": "\u5b8c\u6210",
+    "Success": "\u6210\u529f",
+    "Error": "\u9519\u8bef",
+    "Warning": "\u8b66\u544a",
+    "Info": "\u63d0\u793a",
+    "Details": "\u8be6\u7ec6\u4fe1\u606f",
+    "Show Details": "\u663e\u793a\u8be6\u60c5",
+    "Hide Details": "\u9690\u85cf\u8be6\u60c5",
+    "Learn More": "\u4e86\u89e3\u66f4\u591a",
+    "Learn more": "\u4e86\u89e3\u66f4\u591a",
+    "Absolute path to the Chrome/Chromium executable": "Chrome/Chromium \u53ef\u6267\u884c\u6587\u4ef6\u7684\u7edd\u5bf9\u8def\u5f84",
+    "Receive product updates, tips, and promotions from Google Antigravity via email": "\u901a\u8fc7\u7535\u5b50\u90ae\u4ef6\u63a5\u6536\u6765\u81ea Google Antigravity \u7684\u4ea7\u54c1\u66f4\u65b0\u3001\u4f7f\u7528\u6280\u5de7\u4e0e\u4f18\u60e0\u4fe1\u606f",
+    "copy link": "\u590d\u5236\u94fe\u63a5",
+    "Copy link": "\u590d\u5236\u94fe\u63a5",
+    "General": "\u5e38\u89c4",
+    "Application": "\u5e94\u7528\u8bbe\u7f6e",
+    "Model List": "\u6a21\u578b\u5217\u8868",
+    "Browser Assistant": "\u6d4f\u89c8\u5668\u52a9\u624b",
+    "Shortcuts": "\u5feb\u6377\u952e",
+    "Feedback": "\u610f\u89c1\u53cd\u9988",
+    "Show all": "\u663e\u793a\u5168\u90e8",
+    "Execution": "\u6267\u884c\u63a7\u5236",
+    "Configure agent execution, queued message delivery, and permissions.": "\u914d\u7f6e\u667a\u80fd\u4f53\u6267\u884c\u3001\u6392\u961f\u6d88\u606f\u53d1\u9001\u4e0e\u6743\u9650\u8bbe\u7f6e\u3002",
+    "Queued Messages": "\u6392\u961f\u6d88\u606f",
+    "Configure when follow-up messages are sent.": "\u914d\u7f6e\u540e\u7eed\u6d88\u606f\u7684\u53d1\u9001\u65f6\u673a\u3002",
+    "Keyboard shortcuts": "\u952e\u76d8\u5feb\u6377\u952e",
+    "Queue": "\u6392\u961f",
+    "Send Immediately": "\u7acb\u5373\u53d1\u9001",
+    "Choose a predefined security preset for the agent. This controls terminal auto-execution policy, and file access policy.": "\u4e3a\u667a\u80fd\u4f53\u9009\u62e9\u9884\u8bbe\u7684\u5b89\u5168\u7ea7\u522b\u3002\u8be5\u8bbe\u7f6e\u7528\u4e8e\u63a7\u5236\u7ec8\u7aef\u81ea\u52a8\u6267\u884c\u7b56\u7565\u53ca\u6587\u4ef6\u8bbf\u95ee\u6743\u9650\u3002",
+    "Specifies Agent's behavior when asking for review on artifacts, which are documents it creates to enable a richer conversation experience.": "\u6307\u5b9a\u667a\u80fd\u4f53\u5728\u8bf7\u6c42\u5ba1\u6838\u5176\u521b\u5efa\u7684\u4ea7\u7269\u6587\u6863\u65f6\u7684\u884c\u4e3a\u7b56\u7565\uff0c\u4ee5\u63d0\u4f9b\u66f4\u4e30\u5bcc\u7684\u4ea4\u4e92\u4f53\u9a8c\u3002",
+    "Always Continue": "\u59cb\u7ec8\u7ee7\u7eed",
+    "Configure allowed and denied paths for file reads and writes.": "\u914d\u7f6e\u6587\u4ef6\u8bfb\u53d6\u548c\u5199\u5165\u7684\u5141\u8bb8\u4e0e\u62d2\u7edd\u8def\u5f84\u3002",
+    "Network Access Rules": "\u7f51\u7edc\u8bbf\u95ee\u89c4\u5219",
+    "Configure allowed and denied URLs for reading.": "\u914d\u7f6e\u5141\u8bb8\u548c\u7981\u6b62\u8bfb\u53d6\u7684\u7f51\u7edc URL \u5730\u5740\u3002",
+    "Manage Antigravity app settings.": "\u7ba1\u7406 Antigravity \u5e94\u7528\u7a0b\u5e8f\u8bbe\u7f6e\u3002",
+    "Prevent Sleep": "\u9632\u6b62\u7cfb\u7edf\u4f11\u7720",
+    "Prevent the computer from sleeping while the app is running.": "\u5e94\u7528\u8fd0\u884c\u65f6\u9632\u6b62\u8ba1\u7b97\u673a\u8fdb\u5165\u7761\u7720\u72b6\u6001\u3002",
+    "Keep In Menu Bar": "\u4fdd\u6301\u5728\u83dc\u5355\u680f/\u6258\u76d8",
+    "Keep the app accessible from the menu bar and running in the background when all windows are closed.": "\u5173\u95ed\u6240\u6709\u7a97\u53e3\u540e\u5728\u540e\u53f0\u4fdd\u6301\u8fd0\u884c\uff0c\u5e76\u901a\u8fc7\u83dc\u5355\u680f\u6216\u6258\u76d8\u8bbf\u95ee\u3002",
+    "Remote Control": "\u8fdc\u7a0b\u63a7\u5236",
+    "Enable Remote Control": "\u542f\u7528\u8fdc\u7a0b\u63a7\u5236",
+    "Work with local agents from another device.": "\u4ece\u5176\u4ed6\u8bbe\u5907\u8fde\u63a5\u5e76\u4f7f\u7528\u672c\u5730\u667a\u80fd\u4f53\u3002",
+    "Device Name": "\u8bbe\u5907\u540d\u79f0",
+    "Scan the code to open this device in Remote Control, or copy link.": "\u626b\u63cf\u4e8c\u7ef4\u7801\u4ee5\u5728\u8fdc\u7a0b\u63a7\u5236\u4e2d\u6253\u5f00\u6b64\u8bbe\u5907\uff0c\u6216\u590d\u5236\u94fe\u63a5\u3002",
+    "Notifications": "\u901a\u77e5\u8bbe\u7f6e",
+    "To modify notification settings, open your operating system's system preferences.": "\u5982\u9700\u4fee\u6539\u901a\u77e5\u8bbe\u7f6e\uff0c\u8bf7\u6253\u5f00\u64cd\u4f5c\u7cfb\u7edf\u7684\u7cfb\u7edf\u8bbe\u7f6e\u3002",
+    "Open System Preferences": "\u6253\u5f00\u7cfb\u7edf\u504f\u597d\u8bbe\u7f6e",
+    "Configure the agent's visual theme and display preferences.": "\u914d\u7f6e\u667a\u80fd\u4f53\u89c6\u89c9\u4e3b\u9898\u4e0e\u663e\u793a\u504f\u597d\u3002",
+    "Verbose Agent Chat": "\u663e\u793a\u5b8c\u6574\u601d\u8003\u8fc7\u7a0b",
+    "Display and preserve intermediate thinking steps.": "\u5c55\u793a\u5e76\u4fdd\u7559\u667a\u80fd\u4f53\u7684\u4e2d\u95f4\u601d\u8003\u6b65\u9aa4\u3002",
+    "Conversation Width": "\u5bf9\u8bdd\u7a97\u53e3\u5bbd\u5ea6",
+    "Configure the maximum width of the conversation panel.": "\u914d\u7f6e\u5bf9\u8bdd\u9762\u677f\u7684\u6700\u5927\u663e\u793a\u5bbd\u5ea6\u3002",
+    "Narrow": "\u5c45\u4e2d\u7d27\u51d1",
+    "Wide": "\u5168\u5bbd\u6a21\u5f0f",
+    "Theme": "\u4e3b\u9898",
+    "System Theme": "\u8ddf\u968f\u7cfb\u7edf\u4e3b\u9898",
+    "Preset": "\u9884\u8bbe",
+    "Light": "\u6d45\u8272",
+    "Dark": "\u6df1\u8272",
+    "Default Light": "\u9ed8\u8ba4\u6d45\u8272",
+    "Default Dark": "\u9ed8\u8ba4\u6df1\u8272",
+    "Background": "\u80cc\u666f\u8272",
+    "Foreground": "\u524d\u666f\u8272",
+    "Accent": "\u5f3a\u8c03\u8272",
+    "The breakdown below shows token usage from customizations like skills, rules, and MCP. If the budget is exceeded, large customizations will be truncated automatically.": "\u4e0b\u65b9\u5c55\u793a\u4e86\u6280\u80fd\u3001\u89c4\u5219\u548c MCP \u7b49\u81ea\u5b9a\u4e49\u529f\u80fd\u7684 Token \u6d88\u8017\u660e\u7ec6\u3002\u82e5\u8d85\u51fa\u9884\u7b97\uff0c\u4f53\u79ef\u8fc7\u5927\u7684\u81ea\u5b9a\u4e49\u914d\u7f6e\u5c06\u88ab\u81ea\u52a8\u622a\u65ad\u3002",
+    "There are no customizations enabled.": "\u5f53\u524d\u672a\u542f\u7528\u4efb\u4f55\u81ea\u5b9a\u4e49\u529f\u80fd\u3002",
+    "Skills": "\u6280\u80fd",
+    "Global": "\u5168\u5c40",
+    "Add MCP": "\u6dfb\u52a0 MCP",
+    "Add MCP +": "\u6dfb\u52a0 MCP +",
+    "Open MCP Config": "\u6253\u5f00 MCP \u914d\u7f6e",
+    "Configure default behaviors, skills, and MCP servers. Learn more.": "\u914d\u7f6e\u9ed8\u8ba4\u884c\u4e3a\u3001\u6280\u80fd\u4e0e MCP \u670d\u52a1\u3002\u4e86\u89e3\u66f4\u591a\u3002",
+    "Gemini 3.5 Flash will be taken down soon": "Gemini 3.5 Flash \u5373\u5c06\u4e0b\u7ebf",
+    "Update and switch to Gemini 3.7 Flash for even better performance and efficiency!": "\u8bf7\u66f4\u65b0\u5e76\u5207\u6362\u81f3 Gemini 3.7 Flash\uff0c\u4ee5\u83b7\u5f97\u66f4\u9ad8\u7684\u6027\u80fd\u4e0e\u6548\u7387\uff01",
+    "Dismiss": "\u5ffd\u7565",
+    "MCP Disconnected": "MCP \u5df2\u65ad\u5f00",
+    "MCP Connected": "MCP \u5df2\u8fde\u63a5",
+    "Model Selection": "\u6a21\u578b\u9009\u62e9",
+    "Select Model": "\u9009\u62e9\u6a21\u578b",
+    "Available Models": "\u53ef\u7528\u6a21\u578b",
+    "Custom Model": "\u81ea\u5b9a\u4e49\u6a21\u578b",
+    "API Key": "API \u5bc6\u94a5",
+    "Enter API Key": "\u8f93\u5165 API \u5bc6\u94a5",
+    "API Key is valid": "API \u5bc6\u94a5\u6709\u6548",
+    "API Key is invalid": "API \u5bc6\u94a5\u65e0\u6548",
+    "Save API Key": "\u4fdd\u5b58 API \u5bc6\u94a5",
+    "Token Count": "Token \u8ba1\u6570",
+    "Tokens Used": "\u5df2\u7528 Token",
+    "Frequency Penalty": "\u9891\u7387\u60e9\u7f5a",
+    "Presence Penalty": "\u5b58\u5728\u60e9\u7f5a",
+    "System Prompt": "\u7cfb\u7edf\u63d0\u793a\u8bcd",
+    "System Instructions": "\u7cfb\u7edf\u6307\u4ee4",
+    "User Prompt": "\u7528\u6237\u63d0\u793a\u8bcd",
+    "Weekly Limit Remaining": "\u6bcf\u5468\u5269\u4f59\u989d\u5ea6",
+    "Five Hour Limit Remaining": "5\u5c0f\u65f6\u5269\u4f59\u989d\u5ea6",
+    "Gemini Models": "Gemini \u7cfb\u5217\u6a21\u578b",
+    "Claude and GPT models": "Claude \u4e0e GPT \u7cfb\u5217\u6a21\u578b",
+    "View Usage": "\u67e5\u770b\u989d\u5ea6\u7528\u91cf",
+    "Models & Usage": "\u6a21\u578b\u4e0e\u7528\u91cf",
+    "Manage your model quota and credits.": "\u7ba1\u7406\u60a8\u7684\u6a21\u578b\u914d\u989d\u4e0e\u70b9\u6570\u3002",
+    "Plan": "\u5957\u9910\u8ba1\u5212",
+    "Your Plan: Free": "\u5f53\u524d\u5957\u9910\uff1a\u514d\u8d39\u7248",
+    "You can upgrade to a Google AI Ultra plan to receive higher rate limits.": "\u60a8\u53ef\u4ee5\u5347\u7ea7\u81f3 Google AI Ultra \u5957\u9910\u4ee5\u83b7\u53d6\u66f4\u9ad8\u7684\u901f\u7387\u9650\u5236\u3002",
+    "Upgrade": "\u5347\u7ea7\u5957\u9910",
+    "When toggled on, Antigravity will use your AI credits to fulfill model requests once you're out of model quota. Antigravity will always use your model quota first before using AI credits.": "\u5f00\u542f\u540e\uff0c\u5f53\u6a21\u578b\u914d\u989d\u7528\u5c3d\u65f6\uff0cAntigravity \u5c06\u4f7f\u7528\u60a8\u7684 AI \u70b9\u6570\u7ee7\u7eed\u54cd\u5e94\u8bf7\u6c42\u3002Antigravity \u59cb\u7ec8\u4f1a\u4f18\u5148\u6d88\u8017\u6a21\u578b\u914d\u989d\uff0c\u7136\u540e\u518d\u4f7f\u7528 AI \u70b9\u6570\u3002",
+    "Model": "\u6a21\u578b",
+    "Controls the actions the agent can take.": "\u63a7\u5236\u667a\u80fd\u4f53\u53ef\u6267\u884c\u7684\u64cd\u4f5c\u3002",
+    "Tool Permissions": "\u5de5\u5177\u6743\u9650",
+    "Modify permissions for file, terminal, and MCP tools.": "\u4fee\u6539\u6587\u4ef6\u3001\u7ec8\u7aef\u4e0e MCP \u5de5\u5177\u7684\u8bbf\u95ee\u6743\u9650\u3002",
+    "Whether the agent asks you to review its documents.": "\u667a\u80fd\u4f53\u662f\u5426\u8981\u6c42\u60a8\u5ba1\u6838\u5176\u751f\u6210\u7684\u4ea7\u7269\u6587\u6863\u3002",
+    "Terminal & Tooling Permissions": "\u7ec8\u7aef\u4e0e\u5de5\u5177\u6743\u9650",
+    "Configure allowed commands outside the sandbox.": "\u914d\u7f6e\u5141\u8bb8\u5728\u6c99\u7bb1\u73af\u5883\u5916\u90e8\u6267\u884c\u7684\u547d\u4ee4\u5217\u8868\u3002",
+    "allowed commands outside the sandbox.": "\u5141\u8bb8\u5728\u6c99\u7bb1\u5916\u90e8\u6267\u884c\u7684\u547d\u4ee4\u3002",
+    "Configure the browser subagent. It requires Google Chrome to be installed. The browser subagent can be invoked by typing /browser in the conversation input box.": "\u914d\u7f6e\u6d4f\u89c8\u5668\u5b50\u667a\u80fd\u4f53\u3002\u6b64\u529f\u80fd\u8981\u6c42\u672c\u5730\u5b89\u88c5 Google Chrome \u6d4f\u89c8\u5668\u3002\u5728\u5bf9\u8bdd\u6846\u8f93\u5165 /browser \u5373\u53ef\u8c03\u7528\u3002",
+    "Controls whether the agent can run custom JavaScript to automate complex browser actions.": "\u63a7\u5236\u667a\u80fd\u4f53\u662f\u5426\u53ef\u4ee5\u8fd0\u884c\u81ea\u5b9a\u4e49 JavaScript \u811a\u672c\u4ee5\u5b9e\u73b0\u590d\u6742\u7684\u6d4f\u89c8\u5668\u81ea\u52a8\u5316\u64cd\u4f5c\u3002",
+    "Configure allowed and denied URLs for browser actuation.": "\u914d\u7f6e\u5141\u8bb8\u548c\u7981\u6b62\u6d4f\u89c8\u5668\u6267\u884c\u81ea\u52a8\u5316\u64cd\u4f5c\u7684 URL \u5730\u5740\u3002",
+    "allowed and denied URLs for browser actuation.": "\u5141\u8bb8\u548c\u7981\u6b62\u6d4f\u89c8\u5668\u6267\u884c\u81ea\u52a8\u5316\u64cd\u4f5c\u7684 URL \u5730\u5740\u3002",
+    "Manage your plan, credentials, and general preferences.": "\u7ba1\u7406\u60a8\u7684\u5957\u9910\u8ba1\u5212\u3001\u51ed\u636e\u4ee5\u53ca\u5e38\u89c4\u504f\u597d\u8bbe\u7f6e\u3002",
+    "Enable Telemetry": "\u542f\u7528\u9065\u6d4b\u6570\u636e\u6536\u96c6",
+    "When toggled on, Antigravity collects usage data to help Google enhance performance and features.": "\u5f00\u542f\u540e\uff0cAntigravity \u5c06\u6536\u96c6\u4f7f\u7528\u6570\u636e\uff0c\u4ee5\u534f\u52a9 Google \u4f18\u5316\u8f6f\u4ef6\u6027\u80fd\u4e0e\u4ea7\u54c1\u529f\u80fd\u3002",
+    "Marketing Emails": "\u4ea7\u54c1\u8425\u9500\u90ae\u4ef6",
+    "Receive product updates, tips, and promotions from Google Antigravity via email.": "\u901a\u8fc7\u7535\u5b50\u90ae\u4ef6\u63a5\u6536\u6765\u81ea Google Antigravity \u7684\u6700\u65b0\u4ea7\u54c1\u52a8\u6001\u3001\u4f7f\u7528\u6280\u5de7\u53ca\u4f18\u60e0\u4fe1\u606f\u3002",
+    "Sign Out": "\u9000\u51fa\u767b\u5f55",
+    "By using this app, you agree to its": "\u4f7f\u7528\u672c\u5e94\u7528\u5373\u8868\u793a\u60a8\u540c\u610f\u5176",
+    "Browser settings have moved": "\u6d4f\u89c8\u5668\u8bbe\u7f6e\u5df2\u8fc1\u79fb",
+    "Browser settings have moved to the Browser section of General settings. Go to General settings": "\u6d4f\u89c8\u5668\u8bbe\u7f6e\u73b0\u5df2\u8fc1\u79fb\u81f3\u201c\u5e38\u89c4\u8bbe\u7f6e\u201d\u4e2d\u7684\u201c\u6d4f\u89c8\u5668\u201d\u533a\u57df\u3002\u524d\u5f80\u5e38\u89c4\u8bbe\u7f6e",
+    "Browser settings have moved to the Browser section of General settings.": "\u6d4f\u89c8\u5668\u8bbe\u7f6e\u73b0\u5df2\u8fc1\u79fb\u81f3\u201c\u5e38\u89c4\u8bbe\u7f6e\u201d\u4e2d\u7684\u201c\u6d4f\u89c8\u5668\u201d\u533a\u57df\u3002",
+    "Go to General settings": "\u524d\u5f80\u5e38\u89c4\u8bbe\u7f6e",
+    "Preferences": "\u9996\u9009\u9879",
+    "Reload": "\u91cd\u65b0\u52a0\u8f7d",
+    "Force Reload": "\u5f3a\u5236\u91cd\u65b0\u52a0\u8f7d",
+    "Actual Size": "\u5b9e\u9645\u5927\u5c0f",
+    "Indexing codebase...": "\u4ee3\u7801\u5e93\u7d22\u5f15\u4e2d...",
+    "Thinking Process": "\u601d\u8003\u8fc7\u7a0b",
+    "View changes": "\u67e5\u770b\u4ee3\u7801\u53d8\u66f4",
+    "Accept all": "\u5168\u90e8\u63a5\u53d7",
+    "Reject all": "\u5168\u90e8\u62d2\u7edd",
+    "Close Tab": "\u5173\u95ed\u6807\u7b7e\u9875",
+    "Split Editor Right": "\u5411\u53f3\u62c6\u5206\u7f16\u8f91\u5668",
+    "Split Editor Down": "\u5411\u4e0b\u62c6\u5206\u7f16\u8f91\u5668",
+    "When toggled on, Antigravity will use your AI credits to fulfill model requests once you're out of model quota.": "\u5f00\u542f\u540e\uff0c\u5f53\u6a21\u578b\u914d\u989d\u7528\u5c3d\u65f6\uff0cAntigravity \u5c06\u4f7f\u7528\u60a8\u7684 AI \u70b9\u6570\u7ee7\u7eed\u54cd\u5e94\u8bf7\u6c42\u3002",
+    "Antigravity will always use your model quota first before using AI credits.": "Antigravity \u59cb\u7ec8\u4f1a\u4f18\u5148\u6d88\u8017\u6a21\u578b\u914d\u989d\uff0c\u7136\u540e\u518d\u4f7f\u7528 AI \u70b9\u6570\u3002",
+    "Enable credits overage": "\u5f00\u542f\u70b9\u6570\u8d85\u989d\u6263\u8d39",
+    "enable credits overage": "\u5f00\u542f\u70b9\u6570\u8d85\u989d\u6263\u8d39",
+    "AI credits": "AI \u70b9\u6570",
+    "AI Credits": "AI \u70b9\u6570",
+    "model quota": "\u6a21\u578b\u914d\u989d",
+    "Model quota": "\u6a21\u578b\u914d\u989d",
+    "your model quota and credits.": "\u60a8\u7684\u6a21\u578b\u914d\u989d\u4e0e\u70b9\u6570\u3002",
+    "your model quota and credits": "\u60a8\u7684\u6a21\u578b\u914d\u989d\u4e0e\u70b9\u6570",
+    "You can upgrade to a Google AI Pro plan to receive higher rate limits.": "\u60a8\u53ef\u4ee5\u5347\u7ea7\u81f3 Google AI Pro \u5957\u9910\u4ee5\u83b7\u53d6\u66f4\u9ad8\u7684\u901f\u7387\u9650\u5236\u3002",
+    "You have used some of your weekly limit, it will fully refresh in": "\u5df2\u4f7f\u7528\u90e8\u5206\u6bcf\u5468\u914d\u989d\uff0c\u5c06\u5728",
+    "You have used all of your weekly limit, it will fully refresh in": "\u6bcf\u5468\u914d\u989d\u5df2\u5168\u90e8\u7528\u5c3d\uff0c\u5c06\u5728",
+    "You have used some of your 5-hour limit, it will fully refresh in": "\u5df2\u4f7f\u7528\u90e8\u5206 5 \u5c0f\u65f6\u914d\u989d\uff0c\u5c06\u5728",
+    "You have used all of your 5-hour limit, it will fully refresh in": "5 \u5c0f\u65f6\u914d\u989d\u5df2\u5168\u90e8\u7528\u5c3d\uff0c\u5c06\u5728",
+    "You have used some of your daily limit, it will fully refresh in": "\u5df2\u4f7f\u7528\u90e8\u5206\u6bcf\u65e5\u914d\u989d\uff0c\u5c06\u5728",
+    "You have used all of your daily limit, it will fully refresh in": "\u6bcf\u65e5\u914d\u989d\u5df2\u5168\u90e8\u7528\u5c3d\uff0c\u5c06\u5728",
+    "Choose a predefined security preset for the agent.": "\u4e3a\u667a\u80fd\u4f53\u9009\u62e9\u9884\u8bbe\u7684\u5b89\u5168\u7b56\u7565\u3002",
+    "This controls terminal auto-execution policy, and file access policy.": "\u8be5\u9009\u9879\u63a7\u5236\u7ec8\u7aef\u81ea\u52a8\u6267\u884c\u7b56\u7565\u4ee5\u53ca\u6587\u4ef6\u8bbf\u95ee\u6743\u9650\u3002",
+    "Configure allowed commands outside the sandbox": "\u914d\u7f6e\u5141\u8bb8\u5728\u6c99\u7bb1\u73af\u5883\u5916\u90e8\u6267\u884c\u7684\u547d\u4ee4\u5217\u8868",
+    "allowed commands outside the sandbox": "\u5141\u8bb8\u5728\u6c99\u7bb1\u5916\u90e8\u6267\u884c\u7684\u547d\u4ee4",
+    "Configure allowed and denied paths for file reads and writes": "\u914d\u7f6e\u6587\u4ef6\u8bfb\u53d6\u548c\u5199\u5165\u7684\u5141\u8bb8\u4e0e\u62d2\u7edd\u8def\u5f84",
+    "allowed and denied paths for file reads and writes.": "\u6587\u4ef6\u8bfb\u53d6\u548c\u5199\u5165\u7684\u5141\u8bb8\u4e0e\u62d2\u7edd\u8def\u5f84\u3002",
+    "allowed and denied paths for file reads and writes": "\u6587\u4ef6\u8bfb\u53d6\u548c\u5199\u5165\u7684\u5141\u8bb8\u4e0e\u62d2\u7edd\u8def\u5f84",
+    "Configure allowed and denied URLs for reading": "\u914d\u7f6e\u5141\u8bb8\u548c\u7981\u6b62\u8bfb\u53d6\u7684\u7f51\u7edc URL \u5730\u5740",
+    "allowed and denied URLs for reading.": "\u5141\u8bb8\u548c\u7981\u6b62\u8bfb\u53d6\u7684\u7f51\u7edc URL \u5730\u5740\u3002",
+    "allowed and denied URLs for reading": "\u5141\u8bb8\u548c\u7981\u6b62\u8bfb\u53d6\u7684\u7f51\u7edc URL \u5730\u5740",
+    "Configure allowed and denied URLs for browser actuation": "\u914d\u7f6e\u5141\u8bb8\u548c\u7981\u6b62\u6d4f\u89c8\u5668\u6267\u884c\u81ea\u52a8\u5316\u64cd\u4f5c\u7684 URL \u5730\u5740",
+    "allowed and denied URLs for browser actuation": "\u5141\u8bb8\u548c\u7981\u6b62\u6d4f\u89c8\u5668\u6267\u884c\u81ea\u52a8\u5316\u64cd\u4f5c\u7684 URL \u5730\u5740",
+    "Configure the browser subagent. It requires Google Chrome to be installed.": "\u914d\u7f6e\u6d4f\u89c8\u5668\u5b50\u667a\u80fd\u4f53\u3002\u6b64\u529f\u80fd\u8981\u6c42\u672c\u5730\u5df2\u5b89\u88c5 Google Chrome \u6d4f\u89c8\u5668\u3002",
+    "the browser subagent. It requires Google Chrome to be installed. The browser subagent can be invoked by typing /browser in the conversation input box.": "\u6d4f\u89c8\u5668\u5b50\u667a\u80fd\u4f53\u3002\u6b64\u529f\u80fd\u8981\u6c42\u5b89\u88c5 Google Chrome \u6d4f\u89c8\u5668\u3002\u5728\u5bf9\u8bdd\u6846\u8f93\u5165 /browser \u5373\u53ef\u8c03\u7528\u3002",
+    "The browser subagent can be invoked by typing /browser in the conversation input box.": "\u5728\u5bf9\u8bdd\u8f93\u5165\u6846\u4e2d\u952e\u5165 /browser \u5373\u53ef\u8c03\u7528\u6d4f\u89c8\u5668\u5b50\u667a\u80fd\u4f53\u3002",
+    "Waiting for input": "\u7b49\u5f85\u8f93\u5165",
+    "Waiting for input...": "\u7b49\u5f85\u8f93\u5165\u4e2d...",
+    "Running task": "\u6b63\u5728\u6267\u884c\u4efb\u52a1",
+    "Running task...": "\u6b63\u5728\u6267\u884c\u4efb\u52a1...",
+    "Executing command": "\u6b63\u5728\u6267\u884c\u547d\u4ee4",
+    "Executing command...": "\u6b63\u5728\u6267\u884c\u547d\u4ee4...",
+    "Running subagent": "\u6b63\u5728\u8fd0\u884c\u5b50\u667a\u80fd\u4f53",
+    "Running subagent...": "\u6b63\u5728\u8fd0\u884c\u5b50\u667a\u80fd\u4f53...",
+    "Terminals": "\u7ec8\u7aef",
+    "Terminals 0": "\u7ec8\u7aef 0",
+    "Ask anything, @ to mention files, / for actions": "\u95ee\u6211\u4efb\u4f55\u95ee\u9898\uff0c\u7528 @ \u63d0\u53ca\u6587\u4ef6\uff0c\u7528 / \u6267\u884c\u52a8\u4f5c",
+    "Build With Google Plugins": "\u4f7f\u7528 Google \u63d2\u4ef6\u6784\u5efa",
+    "Request Review": "\u8bf7\u6c42\u5ba1\u9605",
+    "Initializing Coding Session": "\u6b63\u5728\u521d\u59cb\u5316\u7f16\u7801\u4f1a\u8bdd",
+    "Project Initialization and Setup": "\u9879\u76ee\u521d\u59cb\u5316\u548c\u8bbe\u7f6e",
+    "Initial Greeting and Setup": "\u521d\u59cb\u95ee\u5019\u548c\u8bbe\u7f6e",
+    "Discovering Fun Websites": "\u53d1\u73b0\u6709\u8da3\u7f51\u7ad9",
+    "English Response Request": "\u82f1\u6587\u56de\u590d\u8bf7\u6c42",
+    "Detailed Agent Chat": "\u8be6\u7ec6\u4ee3\u7406\u804a\u5929",
+    "Show and save intermediate thinking steps": "\u663e\u793a\u5e76\u4fdd\u5b58\u4e2d\u95f4\u601d\u7ef4\u6b65\u9aa4",
+    "Gemini models": "Gemini \u6a21\u578b",
+    "Claude and GPT Models": "Claude \u548c GPT \u6a21\u578b",
+    "Learn more.": "\u4e86\u89e3\u66f4\u591a\u3002",
+    "Learn more about": "\u4e86\u89e3\u66f4\u591a\uff1a",
+    "Manage application settings.": "\u7ba1\u7406\u5e94\u7528\u8bbe\u7f6e\u3002",
+    "The app will be accessible from the menu bar and will keep running in the background when all windows are closed.": "\u5e94\u7528\u5c06\u53ef\u4ece\u83dc\u5355\u680f\u8bbf\u95ee\uff0c\u5e76\u4f1a\u5728\u6240\u6709\u7a97\u53e3\u5173\u95ed\u540e\u7ee7\u7eed\u5728\u540e\u53f0\u8fd0\u884c\u3002",
+    "Configure AI models and view your quota.": "\u914d\u7f6e AI \u6a21\u578b\u5e76\u67e5\u770b\u60a8\u7684\u989d\u5ea6\u3002",
+    "Within each group, models share a weekly limit and a 5-hour limit. Quota is consumed proportionally to the cost of the tokens. Thus, limits will last longer with shorter tasks or using more cost-effective models. The 5-hour limit smooths out aggregate demand to fairly distribute global capacity across all users, while your weekly limit is tied directly to your individual tier.": "\u5728\u6bcf\u4e2a\u5206\u7ec4\u4e2d\uff0c\u5404\u6a21\u578b\u5171\u4eab\u6bcf\u5468\u989d\u5ea6\u548c 5 \u5c0f\u65f6\u989d\u5ea6\u3002\u989d\u5ea6\u6d88\u8017\u4e0e Token \u6d88\u8017\u6210\u672c\u6210\u6b63\u6bd4\u3002\u56e0\u6b64\uff0c\u4efb\u52a1\u8f83\u77ed\u6216\u4f7f\u7528\u66f4\u5177\u6027\u4ef7\u6bd4\u7684\u6a21\u578b\u65f6\uff0c\u989d\u5ea6\u4f7f\u7528\u65f6\u95f4\u4f1a\u66f4\u957f\u30025 \u5c0f\u65f6\u989d\u5ea6\u9650\u5236\u7528\u4e8e\u5e73\u6ed1\u603b\u4f53\u9700\u6c42\uff0c\u4ece\u800c\u5728\u6240\u6709\u7528\u6237\u4e4b\u95f4\u516c\u5e73\u5206\u914d\u5168\u7403\u7b97\u529b\uff0c\u800c\u60a8\u7684\u6bcf\u5468\u989d\u5ea6\u9650\u5236\u5219\u76f4\u63a5\u4e0e\u60a8\u7684\u4e2a\u4eba\u7b49\u7ea7\u7ed1\u5b9a\u3002",
+    "You can upgrade to a Google AI Ultra plan to receive the highest rate limits.": "\u60a8\u53ef\u4ee5\u5347\u7ea7\u5230 Google AI Ultra \u5957\u9910\uff0c\u4ee5\u83b7\u5f97\u6700\u9ad8\u7684\u901f\u7387\u9650\u5236\u3002",
+    "You currently don't have any MCP Servers installed. Add an MCP server above": "\u60a8\u5f53\u524d\u5c1a\u672a\u5b89\u88c5\u4efb\u4f55 MCP \u670d\u52a1\u5668\u3002\u8bf7\u5728\u4e0a\u65b9\u6dfb\u52a0\u4e00\u4e2a MCP \u670d\u52a1\u5668\u3002",
+    "Show 2 breakdowns": "\u663e\u793a 2 \u4e2a\u660e\u7ec6",
+    "Agent settings and permissions for conversations outside of projects.": "\u9879\u76ee\u5916\u5bf9\u8bdd\u7684\u667a\u80fd\u4f53\u8bbe\u7f6e\u548c\u6743\u9650\u3002",
+    "Inherits from global settings. Local permissions have higher priority.": "\u7ee7\u627f\u81ea\u5168\u5c40\u8bbe\u7f6e\u3002\u672c\u5730\u6743\u9650\u5177\u6709\u66f4\u9ad8\u4f18\u5148\u7ea7\u3002",
+    "Configure allowed terminal commands.": "\u914d\u7f6e\u5141\u8bb8\u7684\u7ec8\u7aef\u547d\u4ee4\u3002",
+    "to navigate": "\u5bfc\u822a",
+    "to select": "\u9009\u62e9",
+    "to close": "\u5173\u95ed",
+    "Automations": "\u81ea\u52a8\u5316",
+    "Automation": "\u81ea\u52a8\u5316",
+    "Global Permissions": "\u5168\u5c40\u6743\u9650",
+    "Plan Review Policy": "\u8ba1\u5212\u5ba1\u9605\u7b56\u7565",
+    "Full machine": "\u5b8c\u5168\u8bbf\u95ee",
+    "Requires manual review for all terminal commands and file accesses outside of the working folders.": "\u5de5\u4f5c\u76ee\u5f55\u5916\u7684\u6240\u6709\u7ec8\u7aef\u547d\u4ee4\u548c\u6587\u4ef6\u8bbf\u95ee\u5747\u9700\u4eba\u5de5\u5ba1\u6838\u3002",
+    "All terminal commands require review. The agent can read or write to any file in the machine.": "\u6240\u6709\u7ec8\u7aef\u547d\u4ee4\u5747\u9700\u4eba\u5de5\u5ba1\u6838\u3002\u667a\u80fd\u4f53\u53ef\u8bfb\u5199\u672c\u673a\u4e0a\u7684\u4efb\u610f\u6587\u4ef6\u3002",
+    "Disables all safety barriers for maximal iteration velocity.": "\u7981\u7528\u6240\u6709\u5b89\u5168\u5c4f\u969c\uff0c\u4ee5\u5b9e\u73b0\u6781\u81f4\u7684\u8fed\u4ee3\u901f\u5ea6\u3002",
+    "Manually customize individual settings.": "\u624b\u52a8\u81ea\u5b9a\u4e49\u5404\u9879\u914d\u7f6e\u3002",
+    "Type": "\u8f93\u5165",
+    "and select": "\u5e76\u9009\u62e9",
+    "plan": "\u8ba1\u5212",
+    "Always prompt for review": "\u59cb\u7ec8\u63d0\u793a\u5ba1\u9605",
+    "Prompt before executing terminal commands": "\u5728\u6267\u884c\u7ec8\u7aef\u547d\u4ee4\u524d\u63d0\u793a\u786e\u8ba4",
+    "Review all plans": "\u5ba1\u9605\u6240\u6709\u8ba1\u5212",
+    "Review plans before execution": "\u5728\u6267\u884c\u524d\u5ba1\u9605\u8ba1\u5212",
+    "Never prompt for review": "\u4ece\u4e0d\u63d0\u793a\u5ba1\u9605",
+    "Auto approve": "\u81ea\u52a8\u6279\u51c6",
+    "Inherit global": "\u7ee7\u627f\u5168\u5c40",
+    "Inherit Global": "\u7ee7\u627f\u5168\u5c40",
+    "Inherit your global permissions when working in this project.": "\u5728\u6b64\u9879\u76ee\u4e2d\u5de5\u4f5c\u65f6\u7ee7\u627f\u60a8\u7684\u5168\u5c40\u6743\u9650\u3002",
+    "Manage project folders, proxy settings, and permissions.": "\u7ba1\u7406\u9879\u76ee\u6587\u4ef6\u5939\u3001\u4ee3\u7406\u8bbe\u7f6e\u4e0e\u6743\u9650\u3002",
+    "Manage project folders, proxy settings and permissions.": "\u7ba1\u7406\u9879\u76ee\u6587\u4ef6\u5939\u3001\u4ee3\u7406\u8bbe\u7f6e\u4e0e\u6743\u9650\u3002",
+    "Whether the agent requires you to review its plan documents.": "\u667a\u80fd\u4f53\u662f\u5426\u8981\u6c42\u60a8\u5ba1\u6838\u5176\u751f\u6210\u7684\u8ba1\u5212\u6587\u6863\u3002",
+    "Type / and select plan to have the agent create a plan.": "\u8f93\u5165 / \u5e76\u9009\u62e9 plan \u8ba9\u667a\u80fd\u4f53\u5236\u5b9a\u8ba1\u5212\u3002",
+    "Also includes Global Permissions while working on this project.": "\u5728\u6b64\u9879\u76ee\u5de5\u4f5c\u65f6\u4ea6\u5305\u542b\u5168\u5c40\u6743\u9650\u3002",
+    "Configure allowed and blocked paths for file reading and writing.": "\u914d\u7f6e\u6587\u4ef6\u8bfb\u53d6\u4e0e\u5199\u5165\u7684\u5141\u8bb8\u548c\u62d2\u7edd\u8def\u5f84\u3002",
+    "Configure allowed and blocked paths for file reading and writing": "\u914d\u7f6e\u6587\u4ef6\u8bfb\u53d6\u4e0e\u5199\u5165\u7684\u5141\u8bb8\u548c\u62d2\u7edd\u8def\u5f84",
+    "Configure allowed and blocked network domains.": "\u914d\u7f6e\u7f51\u7edc\u8bbf\u95ee\u7684\u5141\u8bb8\u548c\u62d2\u7edd\u57df\u540d\u3002",
+    "Configure allowed and blocked network domains": "\u914d\u7f6e\u7f51\u7edc\u8bbf\u95ee\u7684\u5141\u8bb8\u548c\u62d2\u7edd\u57df\u540d",
+    "Also includes": "\u8fd8\u5305\u62ec",
+    "while working on this project.": "\u5728\u6b64\u9879\u76ee\u5de5\u4f5c\u65f6\u3002",
+    "Learn more:": "\u4e86\u89e3\u66f4\u591a\uff1a"
   };
 
-  function getMappedText(text) {
-    if (!text) return null;
-    var t = text.trim();
-    return UI_TEXT_MAP[t] || getRuleBasedText(t) || null;
+  // 2. Exact Phrase / Dynamic Templates
+  const DYNAMIC_TEMPLATES = [
+    { regex: /^Learn\s+more\s+about\s+(.+)$/i, format: (m) => "\u4e86\u89e3\u5173\u4e8e " + m[1] + " \u7684\u66f4\u591a\u4fe1\u606f" },
+    { regex: /^Open\s+(.+)\s+Preferences$/i, format: (m) => "\u6253\u5f00 " + m[1] + " \u504f\u597d\u8bbe\u7f6e" },
+    { regex: /^Open\s+(.+)\s+Settings$/i, format: (m) => "\u6253\u5f00 " + m[1] + " \u8bbe\u7f6e" },
+    { regex: /^Choose\s+a\s+predefined\s+(.+)\s+for\s+the\s+agent\.(.*)$/i, format: (m) => "\u4e3a\u667a\u80fd\u4f53\u9009\u62e9\u9884\u8bbe\u7684 " + m[1] + "\u3002" + m[2] },
+    { regex: /^Scan\s+the\s+code\s+to\s+(.+)$/i, format: (m) => "\u626b\u63cf\u4e8c\u7ef4\u7801\u4ee5 " + m[1] }
+  ];
+
+  // 3. Time Unit Chinese Lookup Map
+  const UNIT_MAP_CN = {
+    'mo': '\u4e2a\u6708\u524d',
+    'month': '\u4e2a\u6708\u524d',
+    'months': '\u4e2a\u6708\u524d',
+    'd': '\u5929\u524d',
+    'day': '\u5929\u524d',
+    'days': '\u5929\u524d',
+    'm': '\u5206\u949f\u524d',
+    'min': '\u5206\u949f\u524d',
+    'mins': '\u5206\u949f\u524d',
+    'minute': '\u5206\u949f\u524d',
+    'minutes': '\u5206\u949f\u524d',
+    'h': '\u5c0f\u65f6\u524d',
+    'hr': '\u5c0f\u65f6\u524d',
+    'hrs': '\u5c0f\u65f6\u524d',
+    'hour': '\u5c0f\u65f6\u524d',
+    'hours': '\u5c0f\u65f6\u524d',
+    's': '\u79d2\u524d',
+    'sec': '\u79d2\u524d',
+    'secs': '\u79d2\u524d',
+    'second': '\u79d2\u524d',
+    'seconds': '\u79d2\u524d',
+    'y': '\u5e74\u524d',
+    'yr': '\u5e74\u524d',
+    'yrs': '\u5e74\u524d',
+    'year': '\u5e74\u524d',
+    'years': '\u5e74\u524d'
+  };
+
+  // 4. Strict Safety Bypass Elements & Ancestor Selectors
+  const IGNORE_TAGS = new Set([
+    'SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE', 'CANVAS',
+    'SVG', 'MATH', 'OBJECT', 'EMBED'
+  ]);
+
+  const CODE_OR_INPUT_TAGS = new Set([
+    'PRE', 'CODE', 'KBD', 'SAMP', 'VAR', 'TEXTAREA'
+  ]);
+
+  const BUTTON_INPUT_TYPES = new Set([
+    'button', 'submit', 'reset'
+  ]);
+
+  const SAFE_ATTRS = ['placeholder', 'title', 'aria-label'];
+
+  const BYPASS_ANCESTOR_SELECTOR = [
+    '.monaco-editor',
+    '.view-lines',
+    '.monaco-list-row',
+    '.cm-editor',
+    '.cm-content',
+    '.editor-instance',
+    '.monaco-tokenized-source',
+    'pre',
+    'code',
+    'kbd',
+    'samp',
+    'var',
+    '.code-block',
+    '.hljs',
+    '.syntax-highlighted',
+    '.highlight',
+    '.terminal',
+    '.xterm',
+    '.xterm-screen',
+    '.xterm-viewport',
+    '.terminal-wrapper',
+    'textarea',
+    '[contenteditable="true"]',
+    '[contenteditable=""]',
+    '[contenteditable]:not([contenteditable="false"])',
+    '[data-no-translate]',
+    '[translate="no"]',
+    'svg',
+    'canvas'
+  ].join(', ');
+
+  // Helper: Format quota refresh duration (prevents "wee..." truncation)
+  function formatQuotaDuration(durStr) {
+    if (!durStr) return '';
+    const res = durStr.trim().replace(/\.$/, '');
+    let dm;
+    if ((dm = res.match(/^(\d+)\s+days?,\s*(\d+)\s+hours?$/i))) {
+      return dm[1] + " \u5929 " + dm[2] + " \u5c0f\u65f6";
+    }
+    if ((dm = res.match(/^(\d+)\s+hours?,\s*(\d+)\s+minutes?$/i))) {
+      return dm[1] + " \u5c0f\u65f6 " + dm[2] + " \u5206\u949f";
+    }
+    if ((dm = res.match(/^(\d+)\s+days?$/i))) {
+      return dm[1] + " \u5929";
+    }
+    if ((dm = res.match(/^(\d+)\s+hours?$/i))) {
+      return dm[1] + " \u5c0f\u65f6";
+    }
+    if ((dm = res.match(/^(\d+)\s+minutes?$/i))) {
+      return dm[1] + " \u5206\u949f";
+    }
+    if ((dm = res.match(/^(\d+)\s+seconds?$/i))) {
+      return dm[1] + " \u79d2";
+    }
+    return res;
   }
 
-  function getRuleBasedText(text) {
-    var match = text.match(/^(\d+(?:\.\d+)?)% of the customization budget is available\.$/);
-    if (match) {
-      return match[1] + '% 的自定义预算可用。';
+  function normalize(str) {
+    if (!str) return '';
+    return str.replace(/\u00a0/g, ' ');
+  }
+
+  function formatTimerUnit(unit) {
+    if (!unit) return "\u79d2";
+    return unit.toLowerCase().startsWith('ms') ? "\u6beb\u79d2" : "\u79d2";
+  }
+
+  // 5. Dynamic Pattern Matcher Pipeline
+  function matchDynamicPatterns(trimmed) {
+    let m;
+
+    // Live Thinking Timer State
+    if ((m = trimmed.match(/^(?:Thinking|Thought)\s+for\s+(\d+(?:\.\d+)?)\s*(s|seconds?|ms)?$/i))) {
+      return "\u601d\u8003\u4e2d (" + m[1] + formatTimerUnit(m[2]) + ")";
+    }
+    if ((m = trimmed.match(/^Thinking\.\.\.\s*\(?(\d+(?:\.\d+)?)\s*(s|seconds?|ms)?\)?$/i))) {
+      return "\u601d\u8003\u4e2d... (" + m[1] + formatTimerUnit(m[2]) + ")";
+    }
+    if ((m = trimmed.match(/^(?:Thinking|Thought)\s*\((\d+(?:\.\d+)?)\s*(s|seconds?|ms)?\)$/i)) ||
+        (m = trimmed.match(/^(?:Thinking|Thought)\s+(\d+(?:\.\d+)?)\s*(s|seconds?|ms)$/i))) {
+      return "\u601d\u8003\u4e2d (" + m[1] + formatTimerUnit(m[2]) + ")";
     }
 
-    match = text.match(/^Your Plan: (.+)$/);
-    if (match) {
-      return '您的套餐：' + match[1];
+    // Live Working Timer State
+    if ((m = trimmed.match(/^(?:Working|Worked)\s+for\s+(\d+(?:\.\d+)?)\s*(s|seconds?|ms)?$/i))) {
+      return "\u5904\u7406\u4e2d (" + m[1] + formatTimerUnit(m[2]) + ")";
+    }
+    if ((m = trimmed.match(/^Working\.\.\.\s*\(?(\d+(?:\.\d+)?)\s*(s|seconds?|ms)?\)?$/i))) {
+      return "\u5904\u7406\u4e2d... (" + m[1] + formatTimerUnit(m[2]) + ")";
+    }
+    if ((m = trimmed.match(/^(?:Working|Worked)\s*\((\d+(?:\.\d+)?)\s*(s|seconds?|ms)?\)$/i)) ||
+        (m = trimmed.match(/^(?:Working|Worked)\s+(\d+(?:\.\d+)?)\s*(s|seconds?|ms)$/i))) {
+      return "\u5904\u7406\u4e2d (" + m[1] + formatTimerUnit(m[2]) + ")";
+    }
+
+    // Completion & Execution Duration Timers
+    if ((m = trimmed.match(/^(Completed|Finished|Done)\s+in\s+(\d+(?:\.\d+)?)\s*(s|seconds?|ms)?$/i))) {
+      return "\u5df2\u5b8c\u6210 (\u8017\u65f6 " + m[2] + formatTimerUnit(m[3]) + ")";
+    }
+    if ((m = trimmed.match(/^Timed\s+(\d+(?:\.\d+)?)\s*(s|seconds?|ms)?$/i))) {
+      return "\u5df2\u8ba1\u65f6 " + m[1] + formatTimerUnit(m[2]);
+    }
+    if ((m = trimmed.match(/^Elapsed\s+time:\s*(\d+(?:\.\d+)?)\s*(s|seconds?|ms)?$/i))) {
+      return "\u8017\u65f6: " + m[1] + formatTimerUnit(m[2]);
+    }
+    if ((m = trimmed.match(/^Total\s+duration:\s*(\d+(?:\.\d+)?)\s*(s|seconds?|ms)?$/i))) {
+      return "\u603b\u8017\u65f6: " + m[1] + formatTimerUnit(m[2]);
+    }
+    if ((m = trimmed.match(/^Execution\s+time:\s*(\d+(?:\.\d+)?)\s*(s|seconds?|ms)?$/i))) {
+      return "\u6267\u884c\u8017\u65f6: " + m[1] + formatTimerUnit(m[2]);
+    }
+
+    // Relative Times
+    if (/^just\s+now$/i.test(trimmed)) return "\u521a\u521a";
+    if (/^a\s+few\s+seconds\s+ago$/i.test(trimmed)) return "\u51e0\u79d2\u524d";
+    if (/^a\s+minute\s+ago$/i.test(trimmed)) return "1\u5206\u949f\u524d";
+    if (/^an\s+hour\s+ago$/i.test(trimmed)) return "1\u5c0f\u65f6\u524d";
+    if (/^a\s+day\s+ago$/i.test(trimmed)) return "1\u5929\u524d";
+    if (/^today$/i.test(trimmed)) return "\u4eca\u5929";
+    if (/^yesterday$/i.test(trimmed)) return "\u6628\u5929";
+
+    if (trimmed.startsWith('Today ')) return trimmed.replace('Today ', "\u4eca\u5929 ");
+    if (trimmed.startsWith('Yesterday ')) return trimmed.replace('Yesterday ', "\u6628\u5929 ");
+
+    // Compact Relative Timestamps: 10d, 5m, 1mo, 2h, 30s, 1y
+    if ((m = trimmed.match(/^(\d+)\s*(mo|[dmhsy])(?:\s+ago)?$/i))) {
+      const unit = m[2].toLowerCase();
+      const cn = UNIT_MAP_CN[unit];
+      if (cn) return m[1] + cn;
+    }
+
+    // Verbose Relative Timestamps: 5 minutes ago, 2 days ago
+    if ((m = trimmed.match(/^(\d+)\s*(months?|days?|hours?|hrs?|minutes?|mins?|seconds?|secs?|years?|yrs?)\s+ago$/i))) {
+      const unit = m[2].toLowerCase();
+      const cn = UNIT_MAP_CN[unit];
+      if (cn) return m[1] + cn;
+    }
+
+    // Dynamic Pane Badges & Workspace Counters
+    if ((m = trimmed.match(/^(Subagents|Files Changed|Artifacts|Uploads|Background Tasks|MCP Servers|Skills|Terminals)\s+(\d+)$/i))) {
+      const typeMap = {
+        'subagents': "\u5b50\u667a\u80fd\u4f53",
+        'files changed': "\u5df2\u4fee\u6539\u6587\u4ef6",
+        'artifacts': "\u4ea7\u7269",
+        'uploads': "\u5df2\u4e0a\u4f20\u6587\u4ef6",
+        'background tasks': "\u540e\u53f0\u4efb\u52a1",
+        'mcp servers': "MCP \u670d\u52a1",
+        'skills': "\u6280\u80fd",
+        'terminals': "\u7ec8\u7aef"
+      };
+      const label = typeMap[m[1].toLowerCase()] || m[1];
+      return label + " " + m[2];
+    }
+
+    // File change counters
+    if ((m = trimmed.match(/^(\d+)\s+files?\s+changed$/i))) return m[1] + " \u4e2a\u6587\u4ef6\u5df2\u4fee\u6539";
+    if ((m = trimmed.match(/^(\d+)\s+files?\s+modified$/i))) return m[1] + " \u4e2a\u6587\u4ef6\u5df2\u4fee\u6539";
+    if ((m = trimmed.match(/^(\d+)\s+files?\s+added$/i))) return m[1] + " \u4e2a\u6587\u4ef6\u5df2\u6dfb\u52a0";
+    if ((m = trimmed.match(/^(\d+)\s+files?\s+deleted$/i))) return m[1] + " \u4e2a\u6587\u4ef6\u5df2\u5220\u9664";
+    if ((m = trimmed.match(/^(\d+)\s+files?$/i))) return m[1] + " \u4e2a\u6587\u4ef6";
+
+    // Agent and Item Counters
+    if ((m = trimmed.match(/^(\d+)\s+subagents?$/i))) return m[1] + " \u4e2a\u5b50\u667a\u80fd\u4f53";
+    if ((m = trimmed.match(/^(\d+)\s+agents?\s+running$/i))) return m[1] + " \u4e2a\u667a\u80fd\u4f53\u8fd0\u884c\u4e2d";
+    if (/^No\s+agents?\s+running$/i.test(trimmed)) return "0 \u4e2a\u667a\u80fd\u4f53\u8fd0\u884c\u4e2d";
+    if (/^1\s+agent\s+running$/i.test(trimmed)) return "1 \u4e2a\u667a\u80fd\u4f53\u8fd0\u884c\u4e2d";
+    if ((m = trimmed.match(/^(\d+)\s+items?\s+selected$/i))) return "\u5df2\u9009 " + m[1] + " \u9879";
+    if ((m = trimmed.match(/^(\d+)\s+selected$/i))) return "\u5df2\u9009 " + m[1] + " \u9879";
+    if ((m = trimmed.match(/^(\d+)\s+tasks?$/i))) return m[1] + " \u4e2a\u4efb\u52a1";
+    if ((m = trimmed.match(/^(\d+)\s+artifacts?$/i))) return m[1] + " \u4e2a\u4ea7\u7269";
+    if ((m = trimmed.match(/^(\d+)\s+changes?$/i))) return m[1] + " \u5904\u66f4\u6539";
+    if ((m = trimmed.match(/^(\d+)\s+errors?$/i))) return m[1] + " \u4e2a\u9519\u8bef";
+    if ((m = trimmed.match(/^(\d+)\s+warnings?$/i))) return m[1] + " \u4e2a\u8b66\u544a";
+    if ((m = trimmed.match(/^(\d+)\s+results?$/i))) return m[1] + " \u4e2a\u7ed3\u679c";
+
+    // Dynamic Templates
+    for (let i = 0; i < DYNAMIC_TEMPLATES.length; i++) {
+      const tmpl = DYNAMIC_TEMPLATES[i];
+      if ((m = trimmed.match(tmpl.regex))) {
+        return tmpl.format(m);
+      }
+    }
+
+    // Quota Limit Refresh Timer (Full & Truncated Sentence Parser)
+    if ((m = trimmed.match(/^You have (?:used\s+(some|all)|reached)\s+(?:of\s+)?your\s+(weekly|5-hour|daily)\s+limit,\s*it will fully refresh in\s+(.+?)\.?$/i))) {
+      const usageType = (m[1] && m[1].toLowerCase() === 'all') ? "\u5168\u90e8" : "\u90e8\u5206";
+      const limitMap = { 'weekly': "\u6bcf\u5468", '5-hour': "5\u5c0f\u65f6", 'daily': "\u6bcf\u65e5" };
+      const limitName = limitMap[m[2].toLowerCase()] || m[2];
+      const dur = formatQuotaDuration(m[3]);
+      return "\u5df2\u4f7f\u7528" + usageType + limitName + "\u989d\u5ea6\uff0c\u5c06\u5728 " + dur + " \u540e\u5b8c\u5168\u91cd\u7f6e\u3002";
+    }
+    if ((m = trimmed.match(/^it will fully refresh in\s+(.+?)\.?$/i))) {
+      const dur = formatQuotaDuration(m[1]);
+      return "\u5c06\u5728 " + dur + " \u540e\u5b8c\u5168\u91cd\u7f6e";
+    }
+    if ((m = trimmed.match(/^You have (?:used\s+(some|all)|reached)\s+(?:of\s+)?your\s+(weekly|5-hour|daily)\s+limit\.?$/i))) {
+      const usageType = (m[1] && m[1].toLowerCase() === 'all') ? "\u5168\u90e8" : "\u90e8\u5206";
+      const limitMap = { 'weekly': "\u6bcf\u5468", '5-hour': "5\u5c0f\u65f6", 'daily': "\u6bcf\u65e5" };
+      const limitName = limitMap[m[2].toLowerCase()] || m[2];
+      return "\u5df2\u4f7f\u7528" + usageType + limitName + "\u989d\u5ea6";
+    }
+
+    // Plan descriptions
+    if ((m = trimmed.match(/^Your Plan:\s*(.+)$/i))) {
+      return "\u5f53\u524d\u5957\u9910\uff1a" + m[1].trim();
+    }
+
+    // Customization Budget
+    if ((m = trimmed.match(/^(\d+(?:\.\d+)?)% of the customization budget is available\.$/i))) {
+      return m[1] + "% \u7684\u81ea\u5b9a\u4e49\u9884\u7b97\u53ef\u7528\u3002";
+    }
+
+    // Settings project modifications
+    if ((m = trimmed.match(/^Controls the actions the agent can take\.\s*Modified in\s+(\d+)\s+projects?$/i))) {
+      return "\u63a7\u5236\u667a\u80fd\u4f53\u53ef\u6267\u884c\u7684\u64cd\u4f5c\u3002\u5df2\u5728 " + m[1] + " \u4e2a\u9879\u76ee\u4e2d\u4fee\u6539";
+    }
+    if ((m = trimmed.match(/^Whether the agent asks you to review its documents\.\s*Modified in\s+(\d+)\s+projects?$/i))) {
+      return "\u667a\u80fd\u4f53\u662f\u5426\u8981\u6c42\u60a8\u5ba1\u6838\u5176\u751f\u6210\u7684\u4ea7\u7269\u6587\u6863\u3002\u5df2\u5728 " + m[1] + " \u4e2a\u9879\u76ee\u4e2d\u4fee\u6539";
+    }
+    if ((m = trimmed.match(/^Modified in\s+(\d+)\s+projects?$/i))) {
+      return "\u5df2\u5728 " + m[1] + " \u4e2a\u9879\u76ee\u4e2d\u4fee\u6539";
     }
 
     return null;
   }
 
-  function getTranslationSync(text, node) {
-    if (!text) return null;
-    var t = text.trim();
-    // 1. 尝试匹配静态字典 (任何地方均可生效)
-    var mapped = getMappedText(t);
-    if (mapped) return mapped;
-    
-    // 2. 尝试从 LocalStorage 读取缓存 (仅限制在设置面板内)
-    if (node && isInsideSettings(node)) {
-      try {
-        var cached = localStorage.getItem('ag_zh_' + t);
-        if (cached) return cached;
-      } catch (e) {}
+  // 6. Master Text Translation Dispatcher
+  function translateText(text) {
+    if (!text || typeof text !== 'string') return null;
+    const normalized = normalize(text);
+    const trimmed = normalized.trim();
+    if (!trimmed) return null;
+
+    // Direct dictionary match
+    if (dictionary[trimmed]) {
+      return normalized.replace(trimmed, dictionary[trimmed]);
     }
+    if (dictionary[normalized]) {
+      return dictionary[normalized];
+    }
+
+    // Dynamic regex & template matchers
+    const dynamicMatch = matchDynamicPatterns(trimmed);
+    if (dynamicMatch !== null) {
+      return normalized.replace(trimmed, dynamicMatch);
+    }
+
     return null;
   }
 
-  function shouldTranslateOnline(text) {
-    if (!text) return false;
-    var t = text.trim();
-    if (t.length <= 1) return false;
+  // 7. Safety Bypass Checks
+  function isBypassedElement(el) {
+    if (!el || el.nodeType !== 1) return false;
+    if (IGNORE_TAGS.has(el.tagName)) return true;
+    if (el.isContentEditable) return true;
+    if (el.getAttribute && el.getAttribute('contenteditable') === 'true') return true;
 
-    // 过滤首字母为小写的项 (通常为变量名、项目名、文件名、方法名等，但包含空格的短语/长句除外)
-    if (/^[a-z]/.test(t) && t.indexOf(' ') === -1) return false;
+    if (el.matches && el.matches(BYPASS_ANCESTOR_SELECTOR)) return true;
+    if (el.closest && el.closest(BYPASS_ANCESTOR_SELECTOR)) return true;
 
-    // 过滤全小写且带 - 或 _ 的项目/目录 slug 结构 (如 01-elegant-darwin)
-    if ((t.indexOf('-') !== -1 || t.indexOf('_') !== -1) && t.toLowerCase() === t) return false;
-
-    // 过滤纯数字或百分比
-    if (/^\d+%?$/.test(t)) return false;
-
-    // 过滤 URL、IP 和系统路径 (斜杠仅在无空格的路径/命令中过滤)
-    if (/^(https?:\/\/|www\.)/i.test(t)) return false;
-    if (/^[a-zA-Z]:\\/i.test(t)) return false;
-    if (t.indexOf('/') !== -1 && t.indexOf(' ') === -1) return false;
-    if (t.indexOf('\\') !== -1 && t.indexOf(' ') === -1) return false;
-
-    // 过滤单字文件名 (如 index.js)
-    if (/\.[a-zA-Z0-9]+$/.test(t) && t.indexOf(' ') === -1) return false;
-
-    // 过滤常见代码结构字符
-    if (t.indexOf('{') !== -1 || t.indexOf('}') !== -1 || t.indexOf('=>') !== -1 || t.indexOf('(') !== -1 || t.indexOf(')') !== -1) return false;
-
-    // 过滤单单词的 snake_case, camelCase 或大写缩写
-    if (t.indexOf(' ') === -1) {
-      if (t.indexOf('_') !== -1) return false;
-      if (t.indexOf('-') !== -1 && !/^[a-zA-Z-]+$/.test(t)) return false;
-      if (/[a-z][A-Z]/.test(t)) return false;
-      if (/^[A-Z0-9]+$/.test(t)) return false;
+    const className = (typeof el.className === 'string') ? el.className : (el.getAttribute ? (el.getAttribute('class') || '') : '');
+    if (className) {
+      const bypassClasses = ['monaco-editor', 'view-lines', 'monaco-list-row', 'terminal', 'xterm', 'code-block', 'hljs', 'cm-editor', 'cm-content'];
+      for (let i = 0; i < bypassClasses.length; i++) {
+        if (className.includes(bypassClasses[i])) return true;
+      }
     }
-
-    // 必须包含英文字母
-    if (!/[a-zA-Z]/.test(t)) return false;
-
-    // 不能包含中文
-    if (/[\u4e00-\u9fa5]/.test(t)) return false;
-
-    return true;
+    return false;
   }
 
-  var inFlightPromises = {};
+  function isBypassedNode(node) {
+    if (!node) return true;
+    if (node.nodeType === 3) {
+      const parent = node.parentElement || node.parentNode;
+      if (!parent || parent.nodeType !== 1) return false;
+      const parentTag = parent.tagName ? parent.tagName.toUpperCase() : '';
+      if (IGNORE_TAGS.has(parentTag) || CODE_OR_INPUT_TAGS.has(parentTag)) return true;
+      if (parent.isContentEditable) return true;
+      if (parent.closest && parent.closest(BYPASS_ANCESTOR_SELECTOR)) return true;
+      return isBypassedElement(parent);
+    }
+    if (node.nodeType === 1) {
+      return isBypassedElement(node);
+    }
+    return false;
+  }
 
-  function translateOnline(text) {
-    if (!text) return Promise.resolve(null);
-    var t = text.trim();
-    if (inFlightPromises[t]) return inFlightPromises[t];
-
-    var promise = new Promise(function(resolve) {
-      // 1. 尝试谷歌翻译
-      var googleUrl = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=' + encodeURIComponent(t);
-      fetch(googleUrl)
-        .then(function(res) {
-          if (!res.ok) throw new Error('Google HTTP ' + res.status);
-          return res.json();
-        })
-        .then(function(json) {
-          var translated = json && json[0] && json[0][0] && json[0][0][0];
-          if (translated && translated.trim() !== t) {
-            var result = translated.trim();
-            try {
-              localStorage.setItem('ag_zh_' + t, result);
-            } catch (e) {}
-            resolve(result);
-          } else {
-            throw new Error('Google empty result');
+  function translateAttributes(el, attrs) {
+    if (!el || !el.getAttribute) return;
+    for (let i = 0; i < attrs.length; i++) {
+      const attr = attrs[i];
+      if (el.hasAttribute && el.hasAttribute(attr)) {
+        const val = el.getAttribute(attr);
+        if (val && typeof val === 'string') {
+          const trans = translateText(val);
+          if (trans !== null && trans !== val) {
+            el.setAttribute(attr, trans);
           }
-        })
-        .catch(function(googleErr) {
-          console.warn('Google translation failed, trying MyMemory fallback...', googleErr);
-          // 2. 谷歌翻译失败，尝试国内直连备用接口 (MyMemory API)
-          var myMemoryUrl = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(t) + '&langpair=en|zh-CN';
-          fetch(myMemoryUrl)
-            .then(function(res) {
-              if (!res.ok) throw new Error('MyMemory HTTP ' + res.status);
-              return res.json();
-            })
-            .then(function(json) {
-              var translated = json && json.responseData && json.responseData.translatedText;
-              if (translated && translated.trim() !== t && !translated.includes('MYMEMORY WARNING')) {
-                var result = translated.trim();
-                try {
-                  localStorage.setItem('ag_zh_' + t, result);
-                } catch (e) {}
-                resolve(result);
-              } else {
-                resolve(null);
-              }
-            })
-            .catch(function(myMemoryErr) {
-              console.error('All translation fallbacks failed for "' + t + '":', myMemoryErr);
-              resolve(null);
-            });
-        });
-    });
-
-    inFlightPromises[t] = promise;
-    return promise;
-  }
-
-  function hasNoTranslate(node) {
-    var el = node.nodeType === 3 ? node.parentElement : node;
-    while (el && el !== document.body) {
-      var flag = el.getAttribute && el.getAttribute('translate');
-      if (flag && flag.toLowerCase() === 'no') return true;
-      if (flag && flag.toLowerCase() === 'yes') return false;
-      el = el.parentElement;
-    }
-    return false;
-  }
-
-  function isInsideSettings(node) {
-    var el = node.nodeType === 3 ? node.parentElement : node;
-    while (el && el !== document.body) {
-      var tag = el.tagName ? el.tagName.toUpperCase() : '';
-      var role = el.getAttribute ? el.getAttribute('role') : '';
-      var className = el.className;
-      var clsStr = typeof className === 'string' ? className : (className && typeof className.baseVal === 'string' ? className.baseVal : '');
-      clsStr = clsStr.toLowerCase();
-
-      var id = typeof el.id === 'string' ? el.id.toLowerCase() : '';
-
-      // 1. 基本的容器类型与类名过滤
-      if (tag === 'DIALOG' || role === 'dialog' || 
-          clsStr.indexOf('settings') !== -1 || clsStr.indexOf('preferences') !== -1 ||
-          clsStr.indexOf('modal') !== -1 || clsStr.indexOf('dialog') !== -1 ||
-          id.indexOf('settings') !== -1 || id.indexOf('preferences') !== -1) {
-        
-        // 2. 语义校验：必须包含至少2个设置分类名称，才认定为“设置界面”，以区别于普通对话框/加号下拉菜单
-        var text = el.textContent || '';
-        var hasGeneral = text.indexOf('General') !== -1 || text.indexOf('通用') !== -1;
-        var hasPermissions = text.indexOf('Permissions') !== -1 || text.indexOf('权限') !== -1;
-        var hasAppearance = text.indexOf('Appearance') !== -1 || text.indexOf('外观') !== -1;
-        var hasModels = text.indexOf('Models') !== -1 || text.indexOf('模型') !== -1;
-        var hasBrowser = text.indexOf('Browser') !== -1 || text.indexOf('浏览器') !== -1;
-
-        var count = (hasGeneral ? 1 : 0) + (hasPermissions ? 1 : 0) + (hasAppearance ? 1 : 0) + (hasModels ? 1 : 0) + (hasBrowser ? 1 : 0);
-        if (count >= 2) {
-          return true;
-        }
-      }
-
-      el = el.parentElement;
-    }
-    return false;
-  }
-
-  var activeProjects = [];
-  function updateActiveProjects() {
-    var dialog = document.querySelector('dialog, [role="dialog"], [class*="settings"], [class*="modal"]');
-    if (!dialog) return;
-
-    var tw = document.createTreeWalker(dialog, NodeFilter.SHOW_TEXT);
-    var textNodes = [];
-    while (tw.nextNode()) {
-      textNodes.push(tw.currentNode);
-    }
-
-    var projectsIdx = -1;
-    var sectionEndIdx = -1;
-
-    for (var i = 0; i < textNodes.length; i++) {
-      var t = textNodes[i].textContent.trim();
-      if (t === 'Projects' || t === '项目') {
-        projectsIdx = i;
-      } else if (
-        t === 'Not in Project' || t === '不在项目中' ||
-        t === 'Shortcuts' || t === '快捷键' ||
-        t === 'Provide Feedback' || t === '提供反馈'
-      ) {
-        if (projectsIdx !== -1 && sectionEndIdx === -1) {
-          sectionEndIdx = i;
-          break;
         }
       }
     }
+  }
 
-    if (projectsIdx !== -1 && sectionEndIdx !== -1) {
-      var list = [];
-      for (var j = projectsIdx + 1; j < sectionEndIdx; j++) {
-        var pName = textNodes[j].textContent.trim();
-        // 保证提取的不是已翻译的中文，且长度大于 1
-        if (pName && pName.length > 1 && !/[\u4e00-\u9fa5]/.test(pName)) {
-          list.push(pName);
+  // 8. Recursive DOM and Shadow DOM Walker
+  function walk(node) {
+    if (!node) return;
+
+    // Text Node (Type 3)
+    if (node.nodeType === 3) {
+      if (isBypassedNode(node)) return;
+      const text = node.nodeValue;
+      if (text && typeof text === 'string') {
+        const trans = translateText(text);
+        if (trans !== null && trans !== text) {
+          node.nodeValue = trans;
         }
       }
-      if (list.length > 0) {
-        activeProjects = list;
-      }
-    }
-  }
-
-  function isProjectNameOrPath(text) {
-    if (!text) return false;
-    var t = text.trim().toLowerCase();
-    for (var i = 0; i < activeProjects.length; i++) {
-      var pName = activeProjects[i].toLowerCase();
-      if (t === pName || t.indexOf(pName + '/') === 0 || t.indexOf(pName + '\\') === 0) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  function walk(root) {
-    updateActiveProjects();
-    var tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-      acceptNode: function(n) {
-        if (hasNoTranslate(n)) return NodeFilter.FILTER_REJECT;
-        if (isProjectNameOrPath(n.textContent)) return NodeFilter.FILTER_SKIP;
-        var text = n.textContent;
-        // 静态字典或本地缓存匹配任意地方；在线翻译仅限于设置/弹窗内
-        return (getTranslationSync(text, n) || (shouldTranslateOnline(text) && isInsideSettings(n)))
-          ? NodeFilter.FILTER_ACCEPT
-          : NodeFilter.FILTER_SKIP;
-      }
-    });
-    var nodes = [];
-    while (tw.nextNode()) nodes.push(tw.currentNode);
-    return nodes;
-  }
-
-  function translateTextNode(node) {
-    if (!node || !node.parentNode) return;
-    if (isProjectNameOrPath(node.textContent)) return;
-    var text = node.textContent;
-    // 1. 同步翻译（静态字典 + 本地缓存）
-    var mapped = getTranslationSync(text, node);
-    if (mapped) {
-      node.textContent = mapped;
       return;
     }
-    // 2. 异步翻译补漏（限制在设置/弹窗内）
-    var t = text.trim();
-    if (shouldTranslateOnline(t) && isInsideSettings(node)) {
-      translateOnline(t).then(function(translated) {
-        if (translated && node.parentNode && node.textContent === text) {
-          node.textContent = translated;
-        }
-      });
-    }
-  }
 
-  function translateAttrs(root) {
-    if (!root || root.nodeType !== 1) return;
-    var attrs = ['placeholder', 'title', 'aria-label'];
-    var nodes = [root];
-    if (root.querySelectorAll) {
-      Array.prototype.push.apply(nodes, root.querySelectorAll('[placeholder], [title], [aria-label]'));
-    }
-    for (var i = 0; i < nodes.length; i++) {
-      if (hasNoTranslate(nodes[i])) continue;
-      for (var j = 0; j < attrs.length; j++) {
-        var attr = attrs[j];
-        var value = nodes[i].getAttribute && nodes[i].getAttribute(attr);
-        if (!value) continue;
-        var trimmed = value.trim();
-        // 1. 同步翻译
-        var syncMapped = getTranslationSync(trimmed, nodes[i]);
-        if (syncMapped) {
-          nodes[i].setAttribute(attr, syncMapped);
-        } else if (shouldTranslateOnline(trimmed) && isInsideSettings(nodes[i])) {
-          // 2. 异步翻译（限制在设置/弹窗内）
-          (function(el, a, val, tr) {
-            translateOnline(tr).then(function(translated) {
-              if (translated && el.isConnected && el.getAttribute(a) === val) {
-                el.setAttribute(a, translated);
-              }
-            });
-          })(nodes[i], attr, value, trimmed);
-        }
+    // DocumentFragment / ShadowRoot (Type 11)
+    if (node.nodeType === 11) {
+      for (let child = node.firstChild; child; child = child.nextSibling) {
+        walk(child);
       }
-    }
-  }
-
-  function translateTree(root) {
-    if (!root) return;
-    if (root.nodeType === 1) {
-      translateAttrs(root);
-      walk(root).forEach(translateTextNode);
       return;
     }
-    if (root.nodeType === 3) {
-      if (hasNoTranslate(root)) return;
-      translateTextNode(root);
+
+    // Element Node (Type 1)
+    if (node.nodeType === 1) {
+      const tag = node.tagName ? node.tagName.toUpperCase() : '';
+
+      if (IGNORE_TAGS.has(tag)) return;
+
+      if (tag === 'TEXTAREA') {
+        translateAttributes(node, SAFE_ATTRS);
+        return;
+      }
+
+      if (tag === 'INPUT') {
+        const itype = (node.getAttribute('type') || 'text').toLowerCase();
+        if (BUTTON_INPUT_TYPES.has(itype)) {
+          translateAttributes(node, [...SAFE_ATTRS, 'value']);
+        } else {
+          translateAttributes(node, SAFE_ATTRS);
+        }
+        return;
+      }
+
+      const isSelfBypassed = (
+        CODE_OR_INPUT_TAGS.has(tag) ||
+        (node.matches && node.matches(BYPASS_ANCESTOR_SELECTOR)) ||
+        isBypassedElement(node)
+      );
+
+      if (isSelfBypassed) {
+        translateAttributes(node, SAFE_ATTRS);
+        return;
+      }
+
+      translateAttributes(node, SAFE_ATTRS);
+
+      if (node.shadowRoot) {
+        observeRoot(node.shadowRoot);
+        walk(node.shadowRoot);
+      }
+
+      for (let child = node.firstChild; child; child = child.nextSibling) {
+        walk(child);
+      }
     }
   }
 
-  function collectUniqueRoots(roots) {
-    var unique = [];
-    for (var i = 0; i < roots.length; i++) {
-      var root = roots[i];
-      if (!root || !root.isConnected) continue;
+  // 9. MutationObserver Setup
+  let observer = null;
+  const observedRoots = new WeakSet();
+  const observerConfig = {
+    childList: true,
+    subtree: true,
+    characterData: true,
+    attributes: true,
+    attributeFilter: ['placeholder', 'title', 'aria-label']
+  };
 
-      var covered = false;
-      for (var j = 0; j < unique.length; j++) {
-        var current = unique[j];
-        if (current === root) {
-          covered = true;
-          break;
-        }
-        if (current.nodeType === 1 && current.contains && current.contains(root)) {
-          covered = true;
-          break;
-        }
-        if (root.nodeType === 1 && root.contains && root.contains(current)) {
-          unique.splice(j, 1);
-          j--;
-        }
-      }
-
-      if (!covered) unique.push(root);
-    }
-    return unique;
+  function observeRoot(root) {
+    if (!root || !observer || observedRoots.has(root)) return;
+    try {
+      observedRoots.add(root);
+      observer.observe(root, observerConfig);
+    } catch (_) {}
   }
 
-  function start() {
-    var pendingRoots = [];
-    var flushScheduled = false;
+  function startObserver() {
+    if (observer || typeof MutationObserver === 'undefined') return;
 
-    function flushPendingRoots() {
-      flushScheduled = false;
-      if (!pendingRoots.length) return;
-
-      var roots = collectUniqueRoots(pendingRoots);
-      pendingRoots = [];
-
-      for (var i = 0; i < roots.length; i++) {
-        translateTree(roots[i]);
-      }
-    }
-
-    function scheduleTranslate(root) {
-      if (!root) return;
-      pendingRoots.push(root);
-      if (flushScheduled) return;
-      flushScheduled = true;
-      requestAnimationFrame(flushPendingRoots);
-    }
-
-    translateTree(document.body);
-
-    new MutationObserver(function(mutations) {
-      for (var i = 0; i < mutations.length; i++) {
-        var m = mutations[i];
-        for (var j = 0; j < m.addedNodes.length; j++) {
-          scheduleTranslate(m.addedNodes[j]);
-        }
-        if (m.type === 'characterData' && m.target.nodeType === 3) {
-          scheduleTranslate(m.target);
+    observer = new MutationObserver(mutations => {
+      for (let i = 0; i < mutations.length; i++) {
+        const m = mutations[i];
+        if (m.type === 'childList') {
+          for (let j = 0; j < m.addedNodes.length; j++) {
+            const added = m.addedNodes[j];
+            if (added.nodeType === 1 && added.shadowRoot) {
+              observeRoot(added.shadowRoot);
+            }
+            walk(added);
+          }
+        } else if (m.type === 'characterData') {
+          const node = m.target;
+          if (!isBypassedNode(node)) {
+            const trans = translateText(node.nodeValue);
+            if (trans !== null && trans !== node.nodeValue) {
+              node.nodeValue = trans;
+            }
+          }
+        } else if (m.type === 'attributes') {
+          const el = m.target;
+          if (el.nodeType === 1 && !isBypassedElement(el)) {
+            translateAttributes(el, SAFE_ATTRS);
+          }
         }
       }
-    }).observe(document.body, {
-      childList: true,
-      subtree: true,
-      characterData: true
     });
+
+    if (typeof document !== 'undefined') {
+      if (document.documentElement) observeRoot(document.documentElement);
+      if (document.body) observeRoot(document.body);
+    }
   }
 
-  if (document.body) {
-    start();
-  } else {
-    document.addEventListener('DOMContentLoaded', start);
+  // 10. Intercept attachShadow for dynamic web components
+  if (typeof Element !== 'undefined' && Element.prototype && Element.prototype.attachShadow) {
+    const origAttachShadow = Element.prototype.attachShadow;
+    Element.prototype.attachShadow = function(init) {
+      const shadowRoot = origAttachShadow.apply(this, arguments);
+      try {
+        if (shadowRoot) {
+          observeRoot(shadowRoot);
+          walk(shadowRoot);
+        }
+      } catch (_) {}
+      return shadowRoot;
+    };
+  }
+
+  // 11. Micro-Sweep on Focus & State Transitions
+  function startPeriodicSweep() {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+    const sweep = () => {
+      try {
+        if (document.documentElement) walk(document.documentElement);
+      } catch (_) {}
+    };
+
+    window.addEventListener('focus', sweep, { passive: true });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') sweep();
+    }, { passive: true });
+    window.addEventListener('popstate', sweep, { passive: true });
+    window.addEventListener('hashchange', sweep, { passive: true });
+
+    if (typeof window.requestIdleCallback === 'function') {
+      const scheduleIdle = () => {
+        window.requestIdleCallback(() => {
+          sweep();
+          setTimeout(scheduleIdle, 5000);
+        }, { timeout: 2000 });
+      };
+      setTimeout(scheduleIdle, 5000);
+    } else {
+      setInterval(sweep, 5000);
+    }
+  }
+
+  // 12. Hook DOM Lifecycle
+  if (typeof document !== 'undefined') {
+    const init = () => {
+      walk(document.documentElement || document.body);
+      startObserver();
+      startPeriodicSweep();
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  }
+
+  // CommonJS export for Node.js unit testing
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+      dictionary,
+      formatQuotaDuration,
+      matchDynamicPatterns,
+      translateText,
+      isBypassedElement,
+      isBypassedNode
+    };
   }
 })();
